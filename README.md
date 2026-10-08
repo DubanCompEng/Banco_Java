@@ -1,2 +1,2 @@
 # Banco_Java
-Proyecto Banco en java
+Proyecto en java para el modulo Programacion Avanzada.
