@@ -2,8 +2,6 @@ package Modelo.Cuentas;// [REQUISITO: Herencia]
 
 import Modelo.Cliente;
 import Modelo.enums.EstadoCredito;
-import Modelo.enums.TipoCuenta;
-
 import java.io.*;
 
 public class CuentaCorriente extends Cuenta implements Serializable{
@@ -11,15 +9,17 @@ public class CuentaCorriente extends Cuenta implements Serializable{
     private double LINEA_CREDITO = 5000000;
     private EstadoCredito estado;
 
-    public CuentaCorriente(String numeroCuenta, Double saldo, Cliente c, TipoCuenta tipo) {
-        super(numeroCuenta, saldo, c, tipo);
-        estado = estado.ACTIVO;
+    //---Constructor
+    public CuentaCorriente(String numeroCuenta, Double saldo, Cliente c) {
+        super(numeroCuenta, saldo, c);
+        estado = EstadoCredito.ACTIVO;
     }
 
+    //---Metodos
     @Override
     public void retirar(double monto) {
-        if(monto > super.saldo + LINEA_CREDITO){
-            super.saldo -= monto;
+        if(monto + COMISION <= this.saldo + LINEA_CREDITO){
+            this.saldo -= monto;
         }
     }
 
@@ -27,4 +27,12 @@ public class CuentaCorriente extends Cuenta implements Serializable{
     public String toString() {
         return "";
     }
+    
+    //---Gets y Sets
+    public double getLINEA_CREDITO() {return LINEA_CREDITO;}
+    public void setLINEA_CREDITO(double LINEA_CREDITO) {this.LINEA_CREDITO = LINEA_CREDITO;}
+
+    public EstadoCredito getEstado() {return estado;}
+    public void setEstado(EstadoCredito estado) {this.estado = estado;}
+    
 }
