@@ -24,6 +24,11 @@ public class Cliente implements Registrar, Ranking, Serializable{
         this.clave = clave;
         this.cuentas = new ArrayList<>();
     }
+
+    public String getClave() {
+        return clave;
+    }
+    
     
     //--Metodos
     public void agregarCuenta(Cuenta cuenta){
@@ -44,10 +49,6 @@ public class Cliente implements Registrar, Ranking, Serializable{
         return nombre + ";" + rut + ";";
     }
 
-    @Override
-    public String toCSV() {
-        
-    }
     
     //---Gets y Sets
     public static int getContador() {return contador;}

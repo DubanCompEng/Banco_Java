@@ -85,7 +85,7 @@ public class Menu {
             System.out.println("----------------------");
             System.out.println("|1. Administrar cuentas");
             System.out.println("|2. Abrir cuenta");
-            System.out.println("|3. Listar cuentas");
+            System.out.println("|3. ");
             System.out.println("|4. Informacion Sucursales");
             System.out.println("|5. cerrar");
             opcion = Integer.parseInt(sc.nextLine());

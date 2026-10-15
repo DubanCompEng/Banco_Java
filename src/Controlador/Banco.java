@@ -16,16 +16,18 @@ import java.io.*;
 public class Banco {
     private HashMap< String, Cliente> clientes = new HashMap<>();
     private Menu menu;
-    
+    private final String nombre = "Pepe bank";
+    public static final String archivo = "datos";
+        
     public static void main(String[] args) {
         Banco banco = new Banco();
         
-        banco.clientes = banco.cargarDatos("datos");
+        banco.clientes = banco.cargarDatos(banco.archivo);
         
         banco.menu = new Menu(banco);
         banco.menu.menuInicio();
         
-        banco.guardarDatos("datos");
+        banco.guardarDatos(banco.archivo);
     }
     
     public Cliente iniciarSesion(){
