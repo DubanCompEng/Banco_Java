@@ -9,11 +9,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public abstract class Cuenta implements Serializable {
-    private static int contadorCuentas = 0;
+    public static int contadorCuentas = 0;
     
     protected String numeroCuenta;
     protected Double saldo;
-    protected Cliente cliente;
+    protected final Cliente cliente;
     ArrayList<Transaccion> historial;
    
     // Constructor
@@ -46,7 +46,6 @@ public abstract class Cuenta implements Serializable {
     public void setSaldo(Double saldo) {this.saldo = saldo;}
 
     public Cliente getC() {return cliente;}
-    public void setC(Cliente c) {this.cliente = c;}
 
     public ArrayList<Transaccion> getHistorial() {return historial;}
     public void setHistorial(ArrayList<Transaccion> historial) {this.historial = historial;}

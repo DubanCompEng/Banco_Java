@@ -29,6 +29,10 @@ public class Cliente implements Registrar, Ranking, Serializable{
         return clave;
     }
     
+    public ArrayList<Cuenta> getCuentas(){
+        return cuentas;
+    }
+    
     
     //--Metodos
     public void agregarCuenta(Cuenta cuenta){

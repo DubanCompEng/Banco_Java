@@ -8,6 +8,7 @@ package Vista;
 
 import Controlador.Banco;
 import Modelo.Cliente;
+import Modelo.enums.TipoCuenta;
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -84,27 +85,74 @@ public class Menu {
             System.out.println("||  Menu Principal  ||");
             System.out.println("----------------------");
             System.out.println("|1. Administrar cuentas");
-            System.out.println("|2. Abrir cuenta");
-            System.out.println("|3. ");
-            System.out.println("|4. Informacion Sucursales");
-            System.out.println("|5. cerrar");
+            System.out.println("|2. Realizar transaccion");
+            System.out.println("|3. Informacion Sucursales");
+            System.out.println("|4. cerrar");
             opcion = Integer.parseInt(sc.nextLine());
             System.out.println("----------------------");         
         
             switch(opcion){
-                case 1 ->{}
+                case 1 ->{
+                    menuCuentas(c);
+                }
                 case 2 ->{}
                 case 3 ->{}
             }
             
-        }while(opcion != 6);
-       
-        
+        }while(opcion != 6);       
     }
     
+    public void menuCuentas(Cliente c){
+        int opcion;
+        
+        do{
+            System.out.println("-------------------");
+            System.out.println("| Menu de cuentas |");
+            System.out.println("|-----------------|");
+            System.out.println("|1. Listar cuentas");
+            System.out.println("|2. Crear cuenta");
+            System.out.println("|3. Eliminar cuenta");
+            System.out.println("|4. Cerrar");
+            opcion = Integer.parseInt(sc.nextLine());
+            System.out.println("--------------------");
+            
+            switch(opcion){
+                case 1 ->{
+                    ArrayList<Object> cuentas = new ArrayList<>(c.getCuentas());
+                    listarInfo(cuentas);
+                }
+                case 2 ->{
+                    int selec;
+                    TipoCuenta tc = null;
+                    do{
+                        System.out.println("--------------------");
+                        System.out.println("| Tipos de cuentas |");
+                        System.out.println("|------------------|");
+                        System.out.println("|1. vista ");
+                        System.out.println("|2. Ahorro");
+                        System.out.println("|3. Corriente");
+                        selec = Integer.parseInt(sc.nextLine());
+                    }while(selec < 1 || selec > 3);
+                    switch(selec){
+                        case 1 -> tc = TipoCuenta.VISTA;
+                        case 2 -> tc = TipoCuenta.AHORRO;
+                        case 3 -> tc = TipoCuenta.CORRIENTE;
+                    }
+                    if (tc != null) banco.crearCuenta(c, tc);
+                }
+                
+            }
+            
+        }while(opcion != 4);
+    }
+    
+
+    
     public void listarInfo(ArrayList<Object> o){
+            System.out.println("--------------------");
         for ( Object obj: o){
-            System.out.println(obj);
+            System.out.println("| " + obj + " |");
         }
+            System.out.println("--------------------");
     }
 }

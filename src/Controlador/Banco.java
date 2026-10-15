@@ -8,6 +8,10 @@ package Controlador;
 
 import Vista.Menu;
 import Modelo.Cliente;
+import Modelo.Cuentas.Cuenta;
+import Modelo.Cuentas.CuentaAhorro;
+import Modelo.Cuentas.CuentaVista;
+import Modelo.enums.TipoCuenta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,12 +26,12 @@ public class Banco {
     public static void main(String[] args) {
         Banco banco = new Banco();
         
-        banco.clientes = banco.cargarDatos(banco.archivo);
+        banco.clientes = banco.cargarDatos();
         
         banco.menu = new Menu(banco);
         banco.menu.menuInicio();
         
-        banco.guardarDatos(banco.archivo);
+        banco.guardarDatos();
     }
     
     public Cliente iniciarSesion(){
@@ -69,7 +73,24 @@ public class Banco {
         return c;
     }
     
-    public HashMap<String, Cliente> cargarDatos(String archivo) {
+    public void crearCuenta(Cliente c, TipoCuenta tc){
+        switch(tc){
+            case TipoCuenta.VISTA -> {
+                String numCuenta = "" + (Cuenta.contadorCuentas + 10000);
+                c.agregarCuenta(new CuentaVista(numCuenta, 0.0, c));
+            }
+            case TipoCuenta.AHORRO ->{
+                String numCuenta = "" + (Cuenta.contadorCuentas + 10000);
+                c.agregarCuenta(new CuentaAhorro(numCuenta, 0.0, c));
+            }
+            case TipoCuenta.CORRIENTE ->{
+                
+            }
+            
+        }
+    }
+    
+    public HashMap<String, Cliente> cargarDatos() {
         if (!new File(archivo).exists()) return new HashMap<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
             return (HashMap<String, Cliente>) ois.readObject();
@@ -79,7 +100,7 @@ public class Banco {
         }
     }
     
-    public void guardarDatos(String archivo){
+    public void guardarDatos(){
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
             oos.writeObject(clientes);
         } catch (IOException e) {
@@ -87,5 +108,6 @@ public class Banco {
         }
 
     }
+    
     
 }
