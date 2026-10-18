@@ -1,28 +1,33 @@
 package Modelo.Cuentas;// [REQUISITO: Herencia]
 
 import Modelo.Cliente;
+import Modelo.Transaccion;
 import Modelo.enums.EstadoCredito;
+import Modelo.excepciones.MontoInvalidoException;
 import java.io.*;
 
 public class CuentaCorriente extends Cuenta implements Serializable{
-    private final double COMISION = 4500;
-    private double LINEA_CREDITO = 5000000;
+    private final double COMISION = 1500;
+    private final double LINEA_CREDITO;
     private EstadoCredito estado;
 
     //---Constructor
-    public CuentaCorriente(String numeroCuenta, Double saldo, Cliente c) {
+    public CuentaCorriente(String numeroCuenta, Double saldo, Cliente c, double credito) {
         super(numeroCuenta, saldo, c);
-        estado = EstadoCredito.ACTIVO;
+        this.LINEA_CREDITO = credito;
+        estado = EstadoCredito.SIN_USAR;
     }
 
     //---Metodos
     @Override
-    public void retirar(double monto) {
-        if(monto + COMISION <= this.saldo + LINEA_CREDITO){
-            this.saldo -= monto;
-        }
+    public void retirar(Transaccion t) {
+        if(t.getMonto() + COMISION <= this.saldo + LINEA_CREDITO){
+            this.saldo -= t.getMonto()+COMISION;
+            setEstado();
+        } else throw new MontoInvalidoException();  
     }
 
+    
     @Override
     public String toString() {
         return "";
@@ -30,9 +35,11 @@ public class CuentaCorriente extends Cuenta implements Serializable{
     
     //---Gets y Sets
     public double getLINEA_CREDITO() {return LINEA_CREDITO;}
-    public void setLINEA_CREDITO(double LINEA_CREDITO) {this.LINEA_CREDITO = LINEA_CREDITO;}
-
-    public EstadoCredito getEstado() {return estado;}
-    public void setEstado(EstadoCredito estado) {this.estado = estado;}
     
+    public EstadoCredito getEstado() {return estado;}
+    public void setEstado() {
+        if (saldo < 0)this.estado = EstadoCredito.ACTIVO;
+        else if(saldo >= 0) this.estado = EstadoCredito.SIN_USAR; 
+        else if((saldo + LINEA_CREDITO) == 0) this.estado = EstadoCredito.COPADO;
+    }
 }

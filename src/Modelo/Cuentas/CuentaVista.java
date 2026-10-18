@@ -17,12 +17,12 @@ public class CuentaVista extends Cuenta implements Serializable{
     }
 
     @Override
-    public void retirar(double monto) {
-        if (saldo < monto + COMISION){
+    public void retirar(Transaccion t) {
+        if (saldo < t.getMonto() + COMISION){
             System.out.println("No tines saldo suficiente");
         }else{
-            saldo -= monto + COMISION;
-            this.historial.add(new Transaccion(this.numeroCuenta, "CAJERO", TipoTransaccion.RETIRO, monto));
+            saldo -= t.getMonto() + COMISION;
+            this.historial.add(new Transaccion(""+Transaccion.contadorTransaccion, this.numeroCuenta, "CAJERO", TipoTransaccion.RETIRO, t.getMonto()));
             System.out.println("Retiro exitoso");
         }
     }

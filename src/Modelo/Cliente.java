@@ -1,13 +1,15 @@
 package Modelo; // [REQUISITO: Package]
 
 import Modelo.Cuentas.Cuenta;
+import Modelo.Cuentas.CuentaCorriente;
+import Modelo.interfaces.Listable;
 import Modelo.interfaces.Ranking;
 import Modelo.interfaces.Registrar;
 
 import java.io.*;
 import java.util.ArrayList;
 
-public class Cliente implements Registrar, Ranking, Serializable{
+public class Cliente implements Listable, Registrar, Ranking, Serializable{
     public static int contador = 0;
 
     private final String rut;
@@ -25,10 +27,15 @@ public class Cliente implements Registrar, Ranking, Serializable{
         this.cuentas = new ArrayList<>();
     }
 
+    public String getRut() {
+        return rut;
+    }
+    public String getNombre() {
+        return nombre;
+    }
     public String getClave() {
         return clave;
     }
-    
     public ArrayList<Cuenta> getCuentas(){
         return cuentas;
     }
@@ -38,7 +45,10 @@ public class Cliente implements Registrar, Ranking, Serializable{
     public void agregarCuenta(Cuenta cuenta){
         cuentas.add(cuenta);
     }
-
+    public void removerCuenta(Cuenta cu){
+        cuentas.remove(cu);
+    }
+    
     @Override
     public double getValorRanking() {
         double total = 0;
@@ -49,8 +59,8 @@ public class Cliente implements Registrar, Ranking, Serializable{
     }
 
     @Override
-    public String toString() {
-        return nombre + ";" + rut + ";";
+    public String mostrarInfo() {
+        return nombre + "| " + rut + ".";
     }
 
     

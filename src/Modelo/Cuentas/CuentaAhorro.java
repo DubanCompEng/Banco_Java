@@ -5,12 +5,13 @@ package Modelo.Cuentas; // [REQUISITO: Package]
 import Modelo.Cliente;
 import Modelo.Transaccion;
 import Modelo.enums.TipoTransaccion;
+import Modelo.excepciones.MontoInvalidoException;
 import java.io.*;
 
 public class CuentaAhorro extends Cuenta implements Serializable{
     private final int MAXRETIROS= 3;
     private int retiros;
-    private final double TASAINTERES= 0.1;
+    private final double TASAINTERES = 0.1;
 
     //---Constructor
     public CuentaAhorro(String numeroCuenta, Double saldo, Cliente titular) {
@@ -19,13 +20,13 @@ public class CuentaAhorro extends Cuenta implements Serializable{
     }
 
     @Override
-    public void retirar(double monto){
+    public void retirar(Transaccion t){
         if (retiros < MAXRETIROS) {
-            if (monto > saldo) {
-                System.out.println("El monto excede el saldo");
-            } else if (monto <= saldo) {
-                saldo -= monto;
-                this.historial.add(new Transaccion(this.numeroCuenta, "CAJERO", TipoTransaccion.RETIRO, monto));
+            if (t.getMonto() > saldo) {
+                throw new MontoInvalidoException();
+            } else if (t.getMonto() <= saldo) {
+                saldo -= t.getMonto();
+                this.historial.add(new Transaccion(""+Transaccion.contadorTransaccion, this.numeroCuenta, "CAJERO", TipoTransaccion.RETIRO, t.getMonto()));
                 System.out.println("Monto Retirado con exito");
                 retiros++;
             }
@@ -36,5 +37,5 @@ public class CuentaAhorro extends Cuenta implements Serializable{
     
     //--- Get y Set
     public int getRetiros() { return retiros;}
-    public void setRetiros(int retiros) { this.retiros = retiros;}
+    public void setRetiros() { this.retiros += 1;}
 }

@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco/src/Controlador/Banco.java</file>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco/src/Vista/Menu.java</file>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco/src/Modelo/Cliente.java</file>
+            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cliente.java</file>
+            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Vista/Menu.java</file>
+            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Controlador/Banco.java</file>
+            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cuentas/Cuenta.java</file>
         </group>
     </open-files>
 </project-private>

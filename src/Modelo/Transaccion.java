@@ -1,41 +1,37 @@
 package Modelo;
 
 import Modelo.enums.TipoTransaccion;
+import Modelo.interfaces.Listable;
 import java.io.Serializable;
 
-public class Transaccion implements Serializable{
-    private String numeroTransaccion;
-    private String cuentaOrigen;
-    private String cuentaDestino;
-    private TipoTransaccion tipo;
-    private double monto;
-    static int contadorTransaccion = 0;
+public class Transaccion implements Serializable, Listable{
+    private final String numeroTransaccion;
+    private final String cuentaOrigen;
+    private final String cuentaDestino;
+    private final TipoTransaccion tipo;
+    private final double monto;
+    public static int contadorTransaccion = 0;
 
     //--- Constructor
-    public Transaccion(String numeroTransaccion, String cuentaOrigen, TipoTransaccion tipo, double monto) {
+    public Transaccion(String numeroTransaccion,String cuentaOrigen, String cuentaDestino, TipoTransaccion tipo, double monto) {
         this.numeroTransaccion = numeroTransaccion;
         this.cuentaOrigen = cuentaOrigen;
-        Transaccion.contadorTransaccion += 1;
+        this.cuentaDestino = cuentaDestino;
+        Transaccion.contadorTransaccion++;
         this.tipo = tipo;
         this.monto = monto;
     }
+    
+    @Override
+    public String mostrarInfo(){
+        return ""+ tipo + " |Origen: " + cuentaOrigen + "|Destino: " + cuentaDestino + "|Monto: " + monto;
+    }
 
-    //---Gets y Sets
+    //---Gets
     public String getNumeroTransaccion() {return numeroTransaccion;}
-    public void setNumeroTransaccion(String numeroTransaccion) {this.numeroTransaccion = numeroTransaccion;}
-
     public String getCuentaOrigen() {return cuentaOrigen;}
-    public void setCuentaOrigen(String cuentaOrigen) {this.cuentaOrigen = cuentaOrigen;}
-
     public String getCuentaDestino() {return cuentaDestino;}
-    public void setCuentaDestino(String cuentaDestino) {this.cuentaDestino = cuentaDestino;}
-
     public TipoTransaccion getTipo() {return tipo;}
-    public void setTipo(TipoTransaccion tipo) {this.tipo = tipo;}
-
     public double getMonto() {return monto;}
-    public void setMonto(double monto) {this.monto = monto;}
-
     public int getContadorTransaccion() {return contadorTransaccion;}
-    public void setContadorTransaccion(int contadorTransaccion) {Transaccion.contadorTransaccion = contadorTransaccion;}
 }
