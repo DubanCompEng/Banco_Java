@@ -16,6 +16,7 @@ import Modelo.Transaccion;
 import Modelo.enums.TipoCuenta;
 import Modelo.enums.TipoTransaccion;
 import Modelo.excepciones.MontoInvalidoException;
+import Modelo.excepciones.SaldoInsuficienteException;
 import java.util.HashMap;
 import java.io.*;
 
@@ -71,6 +72,7 @@ public class Banco {
     
     public Cliente registrarCliente(String[] info){
  
+        // considerar si la cuenta ya existe, modificar metodo
         Cliente c = new Cliente(info[0], info[1], info[2]);
         clientes.put(info[0], c);
         
@@ -124,7 +126,7 @@ public class Banco {
             try{
                 o.retirar(t);
                 d.depositar(t);
-            }catch(MontoInvalidoException e){
+            }catch(SaldoInsuficienteException e){
                 System.out.println("Error:" + e.getMessage());
             }
         } else {
@@ -132,14 +134,14 @@ public class Banco {
                 Transaccion t = new Transaccion(""+Transaccion.contadorTransaccion, "Cajero", d.getNumeroCuenta(), tt, monto);
                 try{
                     d.depositar(t);
-                }catch(MontoInvalidoException e){
+                }catch(SaldoInsuficienteException e){
                     System.out.println("Error:" + e.getMessage());
                 }
             }else if(o != null && d == null){ //retiro de dinero desde una cuenta, en un cajero
                 Transaccion t = new Transaccion(""+Transaccion.contadorTransaccion, o.getNumeroCuenta(), "Cajero", tt, monto);
                 try{
                     o.retirar(t);
-                }catch(MontoInvalidoException e){
+                }catch(SaldoInsuficienteException e){
                     System.out.println("Error:" + e.getMessage());
                 }
             }

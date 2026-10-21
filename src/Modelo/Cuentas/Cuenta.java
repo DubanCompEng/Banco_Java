@@ -14,8 +14,8 @@ public abstract class Cuenta implements Serializable, Listable {
     public static int contadorCuentas = 0;
     
     protected final String numeroCuenta;
-    protected Double saldo;
     protected final Cliente cliente;
+    protected Double saldo;
     protected ArrayList<Transaccion> historial;
    
     // Constructor
@@ -26,16 +26,17 @@ public abstract class Cuenta implements Serializable, Listable {
         this.historial = new ArrayList<>();
     }
 
+    // hay que tratar a depositar como un deposito en la cuenta, desde donde sea
     public void depositar(Transaccion t){
-        if (t.getMonto() >0){
-            saldo+= t.getMonto();
-            historial.add(new Transaccion("" + Transaccion.contadorTransaccion, this.numeroCuenta, this.numeroCuenta, TipoTransaccion.DEPOSITO, t.getMonto()));
-            System.out.println("Deposito realizado");
-            
-        }else throw new MontoInvalidoException();
+        saldo+= t.getMonto();
+        historial.add(t);
+        System.out.println("Deposito realizado");
     }
     
     //---Metodo Abstract
+    // hay que tratar a retirar como retirar dinero de la cuenta, desde done y hacia donde, depende de mas
+    //del contexto en el que se llame al metodo, ya sea para transferir o retirar en caja
+    //el metodo recibe una transaccion t ysi el monto es mayor a el saldo guardar t, no crear uno nuevo
     public abstract void retirar (Transaccion t);
     
     @Override

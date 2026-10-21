@@ -11,6 +11,7 @@ import Modelo.Cliente;
 import Modelo.Cuentas.Cuenta;
 import Modelo.enums.TipoCuenta;
 import Modelo.enums.TipoTransaccion;
+import Modelo.excepciones.MontoInvalidoException;
 import Modelo.interfaces.Listable;
 
 import java.util.Scanner;
@@ -35,7 +36,7 @@ public class Menu {
             System.out.println("|2. Registrar cliente");
             System.out.println("|3. Cerrar");
             System.out.print("|Elegir opcion:");
-            opcion = ExcepcionScannerInt();
+            opcion = ExceptionScannerInt();
             System.out.println("--------------------");
             
             switch(opcion){
@@ -79,7 +80,9 @@ public class Menu {
         return info;
     }
     
-    private void menuPaginaPrincipal(Cliente c){
+    // crear metodo menuRegistro, hacer lo mismo que con menuInicioSesion
+    
+    public void menuPaginaPrincipal(Cliente c){
         int opcion;
         do{
             System.out.println("----------------------");
@@ -87,11 +90,10 @@ public class Menu {
             System.out.println("----------------------");
             System.out.println("|1. Administrar cuentas");
             System.out.println("|2. Realizar transaccion");
-            System.out.println("|3. Ir a una sucursal");
-            System.out.println("|4. cerrar");
+            System.out.println("|3. cerrar");
             System.out.println("|--------------------|");
             System.out.print("|Elegir opcion: ");
-            opcion = ExcepcionScannerInt();
+            opcion = ExceptionScannerInt();
             System.out.println("----------------------");         
         
             switch(opcion){
@@ -100,7 +102,7 @@ public class Menu {
                 }
                 case 2 ->{
                     System.out.println("------------------------");
-                    System.out.println("| Realizar traferencia |");
+                    System.out.println("| Realizar transaccion |");
                     System.out.println("------------------------");
                     System.out.println("| Selec. cuenta origen |");
                     Cuenta o = selecCuenta(c.getCuentas());
@@ -108,6 +110,10 @@ public class Menu {
                     System.out.println("| Selec. cuenta destino |");
                     
                     //seleccionar cliente y cuenta de destino
+                    //un arraylist de string, de ruts de conocidos, for-each para imprimir
+                    //escribir el rut a elegir, puede ser uno de esos o de un nuevo conocido(siempre que este en el hashmap de clientes)
+                    //seleccionar cuenta del conocido, si no una predefinida, i = 0
+                    
                     System.out.print("|rut destinatario: ");
                     String rut = sc.nextLine();
                     Cliente cd = banco.buscarCliente(rut);
@@ -116,16 +122,20 @@ public class Menu {
                     //Cuenta d = selecCuenta(c.getCuentas());
                     //seleccionar cliente y cuenta de destino
                     
-                    System.out.println("-------------------------");
+                    System.out.println("---------------------");
                     System.out.println("| Ingresar monto: ");
-                    double monto = ExcepcionScannerInt();
-                    
-                    banco.realizarTransaccion(o, d, TipoTransaccion.TRANSFERENCIA, monto);
+
+                    try{
+                        double monto = ExceptionScannerDouble();
+                        banco.realizarTransaccion(o, d, TipoTransaccion.TRANSFERENCIA, monto);
+                    }catch(MontoInvalidoException e){
+                        System.out.println("Error: " + e.getMessage() );
+                    }
                 }
                 case 3 ->{}
             }
             
-        }while(opcion != 4);       
+        }while(opcion != 3);       
     }
     
     public void administrarCuentas(Cliente c){
@@ -142,7 +152,7 @@ public class Menu {
             System.out.println("|5. Cerrar");
             System.out.println("|--------------------------|");
             System.out.println("|Seleccionar opcion: ");
-            opcion = ExcepcionScannerInt();
+            opcion = ExceptionScannerInt();
             System.out.println("----------------------------");
             
             switch(opcion){
@@ -170,7 +180,7 @@ public class Menu {
                         System.out.println("|4. Cancelar");
                         System.out.println("|------------------|");
                         System.out.print("|Elegir opcion: ");
-                        selec = ExcepcionScannerInt();
+                        selec = ExceptionScannerInt();
                     }while(selec < 1 || selec > 4);
                     switch(selec){
                         case 1 ->  {if (banco.crearCuenta(c, TipoCuenta.VISTA)) System.out.println("|Cuenta vista creada|");}
@@ -205,7 +215,7 @@ public class Menu {
             System.out.println("|2. Cerrar");
             System.out.println("|------------------");
             System.out.print("|Elegir opcion: ");
-            opcion = ExcepcionScannerInt();
+            opcion = ExceptionScannerInt();
             System.out.println("\n--------------------");
             
             if (opcion > 2 || opcion < 0) System.out.println("Opcion no disponible");
@@ -225,19 +235,28 @@ public class Menu {
             listarInfo(lista);
             System.out.println("---------------------");
             System.out.print("|Seleccionar Cuenta: ");
-            seleccion = ExcepcionScannerInt();
+            seleccion = ExceptionScannerInt();
             if (seleccion < 0 || seleccion >= lista.size()) System.out.println(" Cuenta no encontrada");
         }while(seleccion < 0 || seleccion >= lista.size());
         
         return (Cuenta)cuentas.get(seleccion-1);
     }
     
-    public int ExcepcionScannerInt(){
+    public int ExceptionScannerInt(){
         try{
             return Integer.parseInt(sc.nextLine());
         }catch(NumberFormatException e){
             System.out.println("Error: contenido de entrada no valido");
             return -1;
+        }
+    }
+    
+    public double ExceptionScannerDouble(){
+        try{
+            return Double.parseDouble(sc.nextLine());
+        }catch(NumberFormatException e){
+            System.out.println("Error: contenido de entrada no valido");
+            return -1.0;
         }
     }
     

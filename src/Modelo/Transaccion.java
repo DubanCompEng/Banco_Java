@@ -1,10 +1,12 @@
 package Modelo;
 
 import Modelo.enums.TipoTransaccion;
+import Modelo.excepciones.MontoInvalidoException;
 import Modelo.interfaces.Listable;
 import java.io.Serializable;
 
 public class Transaccion implements Serializable, Listable{
+    //implementar fecha y horario
     private final String numeroTransaccion;
     private final String cuentaOrigen;
     private final String cuentaDestino;
@@ -13,7 +15,9 @@ public class Transaccion implements Serializable, Listable{
     public static int contadorTransaccion = 0;
 
     //--- Constructor
-    public Transaccion(String numeroTransaccion,String cuentaOrigen, String cuentaDestino, TipoTransaccion tipo, double monto) {
+    public Transaccion(String numeroTransaccion,String cuentaOrigen, String cuentaDestino, TipoTransaccion tipo, double monto) throws MontoInvalidoException {
+        if (monto <= 0) throw new MontoInvalidoException();
+        
         this.numeroTransaccion = numeroTransaccion;
         this.cuentaOrigen = cuentaOrigen;
         this.cuentaDestino = cuentaDestino;

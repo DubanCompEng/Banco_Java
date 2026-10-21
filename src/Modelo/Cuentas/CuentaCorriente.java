@@ -3,7 +3,7 @@ package Modelo.Cuentas;// [REQUISITO: Herencia]
 import Modelo.Cliente;
 import Modelo.Transaccion;
 import Modelo.enums.EstadoCredito;
-import Modelo.excepciones.MontoInvalidoException;
+import Modelo.excepciones.SaldoInsuficienteException;
 import java.io.*;
 
 public class CuentaCorriente extends Cuenta implements Serializable{
@@ -24,7 +24,7 @@ public class CuentaCorriente extends Cuenta implements Serializable{
         if(t.getMonto() + COMISION <= this.saldo + LINEA_CREDITO){
             this.saldo -= t.getMonto()+COMISION;
             setEstado();
-        } else throw new MontoInvalidoException();  
+        } else throw new SaldoInsuficienteException();
     }
 
     

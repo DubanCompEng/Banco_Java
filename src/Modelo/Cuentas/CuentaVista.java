@@ -5,6 +5,7 @@ package Modelo.Cuentas; // [REQUISITO: Package]
 import Modelo.Cliente;
 import Modelo.Transaccion;
 import Modelo.enums.TipoTransaccion;
+import Modelo.excepciones.SaldoInsuficienteException;
 
 import java.io.*;
 
@@ -19,7 +20,7 @@ public class CuentaVista extends Cuenta implements Serializable{
     @Override
     public void retirar(Transaccion t) {
         if (saldo < t.getMonto() + COMISION){
-            System.out.println("No tines saldo suficiente");
+            throw new SaldoInsuficienteException();
         }else{
             saldo -= t.getMonto() + COMISION;
             this.historial.add(new Transaccion(""+Transaccion.contadorTransaccion, this.numeroCuenta, "CAJERO", TipoTransaccion.RETIRO, t.getMonto()));

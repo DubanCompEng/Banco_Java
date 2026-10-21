@@ -5,10 +5,11 @@ package Modelo.Cuentas; // [REQUISITO: Package]
 import Modelo.Cliente;
 import Modelo.Transaccion;
 import Modelo.enums.TipoTransaccion;
-import Modelo.excepciones.MontoInvalidoException;
+import Modelo.excepciones.SaldoInsuficienteException;
 import java.io.*;
 
 public class CuentaAhorro extends Cuenta implements Serializable{
+    // implementar fechas y calcular(metodo) intereses con ella
     private final int MAXRETIROS= 3;
     private int retiros;
     private final double TASAINTERES = 0.1;
@@ -23,7 +24,7 @@ public class CuentaAhorro extends Cuenta implements Serializable{
     public void retirar(Transaccion t){
         if (retiros < MAXRETIROS) {
             if (t.getMonto() > saldo) {
-                throw new MontoInvalidoException();
+                throw new SaldoInsuficienteException();
             } else if (t.getMonto() <= saldo) {
                 saldo -= t.getMonto();
                 this.historial.add(new Transaccion(""+Transaccion.contadorTransaccion, this.numeroCuenta, "CAJERO", TipoTransaccion.RETIRO, t.getMonto()));

@@ -1,22 +1,19 @@
 package Modelo; // [REQUISITO: Package]
 
 import Modelo.Cuentas.Cuenta;
-import Modelo.Cuentas.CuentaCorriente;
 import Modelo.interfaces.Listable;
 import Modelo.interfaces.Ranking;
-import Modelo.interfaces.Registrar;
 
 import java.io.*;
 import java.util.ArrayList;
 
-public class Cliente implements Listable, Registrar, Ranking, Serializable{
+public class Cliente implements Listable, Ranking, Serializable{
     public static int contador = 0;
 
     private final String rut;
     private final String nombre;
     private final String clave;
     private final ArrayList<Cuenta> cuentas;
-    private double saldoTotal;
 
     //---Constructor
     public Cliente(String rut, String nombre, String clave){
@@ -66,8 +63,6 @@ public class Cliente implements Listable, Registrar, Ranking, Serializable{
     
     //---Gets y Sets
     public static int getContador() {return contador;}
-    public static void setContador(int contador) {Cliente.contador = contador;}
 
-    public double getSaldoTotal() {return saldoTotal;}
-    public void setSaldoTotal(double saldoTotal) {this.saldoTotal = saldoTotal;}
+
 }
