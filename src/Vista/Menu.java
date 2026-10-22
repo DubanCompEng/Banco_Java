@@ -58,9 +58,13 @@ public class Menu {
                     info[2] = sc.nextLine();
                     
                     Cliente c = banco.registrarCliente(info);
-                    if (c != null){
-                        System.out.println("Iniciando Sesion ");
+                    if (c != null) {
+                        System.out.println("Cliente registrado correctamente.");
+                        System.out.println("Iniciando sesion.");
                         menuPaginaPrincipal(c);
+                    } else {
+                    System.out.println(
+                         "Error al registrar cliente" + "Verifique los datos.");
                     }
                 }
                 case 3 -> {System.out.println("Saliendo del sistema");}

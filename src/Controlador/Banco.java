@@ -71,12 +71,23 @@ public class Banco {
     }
     
     public Cliente registrarCliente(String[] info){
- 
-        // considerar si la cuenta ya existe, modificar metodo
-        Cliente c = new Cliente(info[0], info[1], info[2]);
-        clientes.put(info[0], c);
         
-        return c;
+        String rut = info[0].trim();
+        String nombre = info[1].trim();
+        String clave = info[2].trim();
+
+            if (rut.isEmpty() || nombre.isEmpty() || clave.isEmpty()) {
+                return null;
+    }
+
+    if (clientes.containsKey(rut)) {
+        return null;
+    }
+
+    Cliente cliente = new Cliente(rut, nombre, clave);
+    clientes.put(rut, cliente);
+
+        return cliente;
     }
     
     public boolean crearCuenta(Cliente c, TipoCuenta tc){
