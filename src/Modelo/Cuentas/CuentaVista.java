@@ -18,13 +18,16 @@ public class CuentaVista extends Cuenta implements Serializable{
     }
 
     @Override
-    public void retirar(Transaccion t) {
-        if (saldo < t.getMonto() + COMISION){
-            throw new SaldoInsuficienteException();
-        }else{
-            saldo -= t.getMonto() + COMISION;
-            this.historial.add(new Transaccion(""+Transaccion.contadorTransaccion, this.numeroCuenta, "CAJERO", TipoTransaccion.RETIRO, t.getMonto()));
-            System.out.println("Retiro exitoso");
+    public boolean retirar(Transaccion t) {
+        if (t.getMonto() <= 0) {
+            throw new Modelo.excepciones.MontoInvalidoException();
         }
+        if (saldo < t.getMonto() + COMISION) {
+            throw new SaldoInsuficienteException();
+        }
+    saldo -= t.getMonto() + COMISION;
+    historial.add(t);
+    System.out.println("Retiro realizada.");
+    return true;
     }
 }

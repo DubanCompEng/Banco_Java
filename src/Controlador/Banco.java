@@ -135,8 +135,11 @@ public class Banco {
             // transaccion entre 2 cuentas
             Transaccion t = new Transaccion(""+Transaccion.contadorTransaccion, o.getNumeroCuenta(), d.getNumeroCuenta(), tt, monto);
             try{
-                o.retirar(t);
-                d.depositar(t);
+                if (o.retirar(t)) {
+                    d.depositar(t);
+                } else {
+                    System.out.println("No se pudo realizar el retiro.");
+                }
             }catch(SaldoInsuficienteException e){
                 System.out.println("Error:" + e.getMessage());
             }

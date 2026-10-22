@@ -37,7 +37,7 @@ public abstract class Cuenta implements Serializable, Listable {
     // hay que tratar a retirar como retirar dinero de la cuenta, desde done y hacia donde, depende de mas
     //del contexto en el que se llame al metodo, ya sea para transferir o retirar en caja
     //el metodo recibe una transaccion t ysi el monto es mayor a el saldo guardar t, no crear uno nuevo
-    public abstract void retirar (Transaccion t);
+    public abstract boolean retirar (Transaccion t);
     
     @Override
     public String mostrarInfo(){

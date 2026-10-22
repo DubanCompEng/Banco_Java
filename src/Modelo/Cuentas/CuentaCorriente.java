@@ -1,4 +1,4 @@
-package Modelo.Cuentas;// [REQUISITO: Herencia]
+    package Modelo.Cuentas;// [REQUISITO: Herencia]
 
 import Modelo.Cliente;
 import Modelo.Transaccion;
@@ -20,12 +20,21 @@ public class CuentaCorriente extends Cuenta implements Serializable{
 
     //---Metodos
     @Override
-    public void retirar(Transaccion t) {
-        if(t.getMonto() + COMISION <= this.saldo + LINEA_CREDITO){
-            this.saldo -= t.getMonto()+COMISION;
-            setEstado();
-        } else throw new SaldoInsuficienteException();
-    }
+    public boolean retirar(Transaccion t) {
+        if (t.getMonto() <= 0) {
+            throw new Modelo.excepciones.MontoInvalidoException();
+        }
+        double total = t.getMonto() + COMISION;
+        if (total > saldo + LINEA_CREDITO) {
+            throw new SaldoInsuficienteException();
+        }
+        
+        saldo -= total;
+        historial.add(t);
+        setEstado();
+        System.out.println("Retiro o transferencia realizado con exito.");
+        return true;
+}
 
     
     @Override
@@ -38,8 +47,12 @@ public class CuentaCorriente extends Cuenta implements Serializable{
     
     public EstadoCredito getEstado() {return estado;}
     public void setEstado() {
-        if (saldo < 0)this.estado = EstadoCredito.ACTIVO;
-        else if(saldo >= 0) this.estado = EstadoCredito.SIN_USAR; 
-        else if((saldo + LINEA_CREDITO) == 0) this.estado = EstadoCredito.COPADO;
+        if (saldo <= -LINEA_CREDITO){
+            this.estado = EstadoCredito.COPADO;
+        } else if (saldo < 0) {
+            this.estado = EstadoCredito.ACTIVO;
+        } else {
+            this.estado = EstadoCredito.SIN_USAR;
+        }
     }
 }

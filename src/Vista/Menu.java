@@ -79,7 +79,7 @@ public class Menu {
         System.out.print("|  Ingrese su rut: ");
         info[0] = sc.nextLine();
         System.out.print("|  Ingrese su contrasenia: ");
-        info[1] = sc.nextLine();        
+        info[1] = sc.nextLine();            
         
         return info;
     }
@@ -94,7 +94,9 @@ public class Menu {
             System.out.println("----------------------");
             System.out.println("|1. Administrar cuentas");
             System.out.println("|2. Realizar transaccion");
-            System.out.println("|3. cerrar");
+            System.out.println("|3. Retirar");
+            System.out.println("|4. depositar");
+            System.out.println("|5. Cerrar sesion");
             System.out.println("|--------------------|");
             System.out.print("|Elegir opcion: ");
             opcion = ExceptionScannerInt();
@@ -136,12 +138,46 @@ public class Menu {
                         System.out.println("Error: " + e.getMessage() );
                     }
                 }
-                case 3 ->{}
+                case 3 ->{
+                    if (c.getCuentas().isEmpty()) {
+                        System.out.println("No tienes cuentas para retirar.");
+                        break;
+                    }
+                    System.out.println("| Selecciona la cuenta de origen |");
+                    Cuenta origen = selecCuenta(c.getCuentas());
+                    System.out.print("Ingrese el monto a retirar: ");
+                    try {
+                        double monto = ExceptionScannerDouble();
+                        banco.realizarTransaccion(origen, null, TipoTransaccion.RETIRO, monto);
+                    } catch (MontoInvalidoException e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                    }
+                case 4 -> {
+                    if (c.getCuentas().isEmpty()) {
+                        System.out.println("No tienes cuentas para depositar.");
+                        break;
+                    }
+                    System.out.println("| Selecciona la cuenta de destino |");
+                    Cuenta destino = selecCuenta(c.getCuentas());        
+                    System.out.print("Ingrese el monto a depositar: ");
+
+                    try {
+                        double monto = ExceptionScannerDouble();
+                            if (monto <= 0) {System.out.println("Monto invalido");
+                        break;
+                    }
+                    banco.realizarTransaccion(null,destino,TipoTransaccion.DEPOSITO,monto);
+                    } catch (MontoInvalidoException e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                    }
+                case 5 -> {
+                    System.out.println("Cerrando sesion.");
+                }  
             }
-            
-        }while(opcion != 3);       
-    }
-    
+        } while(opcion != 5); 
+    }       
     public void administrarCuentas(Cliente c){
         int opcion;
         
@@ -240,8 +276,8 @@ public class Menu {
             System.out.println("---------------------");
             System.out.print("|Seleccionar Cuenta: ");
             seleccion = ExceptionScannerInt();
-            if (seleccion < 0 || seleccion >= lista.size()) System.out.println(" Cuenta no encontrada");
-        }while(seleccion < 0 || seleccion >= lista.size());
+            if (seleccion < 1 || seleccion > lista.size()) System.out.println(" Cuenta no encontrada");
+        }while(seleccion < 1 || seleccion > lista.size());
         
         return (Cuenta)cuentas.get(seleccion-1);
     }
