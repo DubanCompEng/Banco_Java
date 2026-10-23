@@ -10,9 +10,9 @@ import java.io.*;
 
 public class CuentaAhorro extends Cuenta implements Serializable{
     // implementar fechas y calcular(metodo) intereses con ella
-    private final int MAXRETIROS= 3;
+    private static double TASAINTERES = 0.1;
+    private static int MAXRETIROS= 3;
     private int retiros;
-    private final double TASAINTERES = 0.1;
 
     //---Constructor
     public CuentaAhorro(String numeroCuenta, Double saldo, Cliente titular) {
@@ -37,7 +37,13 @@ public class CuentaAhorro extends Cuenta implements Serializable{
                 retiros++;
                 System.out.println("Retiro realizado con exito.");
                     return true;
-                }
+    }
+    
+    @Override
+    public String mostrarInfo() {
+        return "Ahorro | " + super.mostrarInfo() + " | Saldo: $" + saldo + " | Retiros: " + retiros + "/" + MAXRETIROS;
+    }
+    
     //--- Get y Set
     public int getRetiros() { return retiros;}
     public void setRetiros() { this.retiros += 1;}

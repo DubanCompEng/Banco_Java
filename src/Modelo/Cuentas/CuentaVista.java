@@ -11,7 +11,7 @@ import java.io.*;
 
 //--Constructor
 public class CuentaVista extends Cuenta implements Serializable{
-    private final double COMISION = 300;
+    private static double COMISION = 300;
 
     public CuentaVista(String numeroCuenta, Double saldo, Cliente titular) {
         super(numeroCuenta, saldo, titular);
@@ -29,5 +29,10 @@ public class CuentaVista extends Cuenta implements Serializable{
     historial.add(t);
     System.out.println("Retiro realizada.");
     return true;
+    }
+    
+    @Override
+    public String mostrarInfo() {
+        return "Vista | " + super.mostrarInfo() + " | Saldo: $" + saldo;
     }
 }

@@ -24,6 +24,7 @@ public abstract class Cuenta implements Serializable, Listable {
         this.saldo = saldo;
         this.cliente = titular;
         this.historial = new ArrayList<>();
+        contadorCuentas++;
     }
 
     // hay que tratar a depositar como un deposito en la cuenta, desde donde sea
@@ -49,5 +50,7 @@ public abstract class Cuenta implements Serializable, Listable {
     public Double getSaldo() {return saldo;}
     public Cliente getC() {return cliente;}
     public ArrayList<Transaccion> getHistorial() {return historial;}
- 
+    
+    public static int getContadorCuentas() { return contadorCuentas; }
+    public static void setContadorCuentas(int valor) { contadorCuentas = valor; }
 }

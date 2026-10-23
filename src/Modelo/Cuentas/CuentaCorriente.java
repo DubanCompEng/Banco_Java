@@ -7,14 +7,14 @@ import Modelo.excepciones.SaldoInsuficienteException;
 import java.io.*;
 
 public class CuentaCorriente extends Cuenta implements Serializable{
-    private final double COMISION = 1500;
-    private final double LINEA_CREDITO;
+    private static double COMISION = 1500;
+    private static double LINEA_CREDITO;
     private EstadoCredito estado;
 
     //---Constructor
     public CuentaCorriente(String numeroCuenta, Double saldo, Cliente c, double credito) {
         super(numeroCuenta, saldo, c);
-        this.LINEA_CREDITO = credito;
+        CuentaCorriente.LINEA_CREDITO = credito;
         estado = EstadoCredito.SIN_USAR;
     }
 
@@ -38,8 +38,8 @@ public class CuentaCorriente extends Cuenta implements Serializable{
 
     
     @Override
-    public String toString() {
-        return "";
+    public String mostrarInfo() {
+        return "Corriente | " + super.mostrarInfo() + " | Saldo: $" + saldo + " | Linea: $" + LINEA_CREDITO + " | Estado: " + estado;
     }
     
     //---Gets y Sets
