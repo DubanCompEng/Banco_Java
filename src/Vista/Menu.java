@@ -111,23 +111,41 @@ public class Menu {
                     System.out.println("| Realizar transaccion |");
                     System.out.println("------------------------");
                     System.out.println("| Selec. cuenta origen |");
+                    if (c.getCuentas().isEmpty()) {
+                        System.out.println("No tienes cuentas para transferir.");
+                        break;
+                    }
                     Cuenta o = selecCuenta(c.getCuentas());
                     System.out.println("-------------------------");
                     System.out.println("| Selec. cuenta destino |");
-                    
                     //seleccionar cliente y cuenta de destino
                     //un arraylist de string, de ruts de conocidos, for-each para imprimir
                     //escribir el rut a elegir, puede ser uno de esos o de un nuevo conocido(siempre que este en el hashmap de clientes)
                     //seleccionar cuenta del conocido, si no una predefinida, i = 0
-                    
-                    System.out.print("|rut destinatario: ");
-                    String rut = sc.nextLine();
+                    if (c.getConocidos().isEmpty()) {
+                        System.out.println("no tienes conocidos registrados.");
+                    } else {
+                        System.out.println("Tus conocidos:");
+
+                    for (String rutConocido : c.getConocidos()) {
+                        Cliente conocido = banco.buscarCliente(rutConocido);
+
+                    if (conocido != null) {
+                        System.out.println("- " + conocido.getNombre()+ " | RUT: " + rutConocido);
+                        }
+                    }
+                    }
+                    System.out.print("Ingrese el RUT del destinatario ");
+                    String rut = sc.nextLine().trim();
                     Cliente cd = banco.buscarCliente(rut);
-                    Cuenta d = selecCuenta(cd.getCuentas()); 
-                    
+                    if (cd == null) {System.out.println("No existe un cliente con ese RUT.");
+                        break;
+                    }  
+              
+                    System.out.println("-------------------------");
+                    System.out.println("| Seleccionar cuenta destino |");
+                    Cuenta d = selecCuenta(cd.getCuentas());
                     //Cuenta d = selecCuenta(c.getCuentas());
-                    //seleccionar cliente y cuenta de destino
-                    
                     System.out.println("---------------------");
                     System.out.println("| Ingresar monto: ");
 

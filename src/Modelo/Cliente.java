@@ -14,6 +14,7 @@ public class Cliente implements Listable, Ranking, Serializable{
     private final String nombre;
     private final String clave;
     private final ArrayList<Cuenta> cuentas;
+    private final ArrayList<String> conocidos;
 
     //---Constructor
     public Cliente(String rut, String nombre, String clave){
@@ -22,6 +23,7 @@ public class Cliente implements Listable, Ranking, Serializable{
         this.nombre = nombre;
         this.clave = clave;
         this.cuentas = new ArrayList<>();
+        this.conocidos = new ArrayList<>();
     }
 
     public String getRut() {
@@ -36,11 +38,17 @@ public class Cliente implements Listable, Ranking, Serializable{
     public ArrayList<Cuenta> getCuentas(){
         return cuentas;
     }
-    
+     public ArrayList<String> getConocidos() {
+        return conocidos;
+    }
     
     //--Metodos
     public void agregarCuenta(Cuenta cuenta){
         cuentas.add(cuenta);
+    }
+    public void agregarConocido(String rut) {{
+        conocidos.add(rut);
+    }
     }
     public void removerCuenta(Cuenta cu){
         cuentas.remove(cu);
@@ -63,6 +71,6 @@ public class Cliente implements Listable, Ranking, Serializable{
     
     //---Gets y Sets
     public static int getContador() {return contador;}
-
-
+    
+    
 }
