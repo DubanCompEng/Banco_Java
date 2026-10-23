@@ -23,20 +23,21 @@ public class CuentaAhorro extends Cuenta implements Serializable{
     @Override
     public boolean retirar(Transaccion t){
         if (t.getMonto() <= 0) {
-                throw new Modelo.excepciones.MontoInvalidoException();
-                }
-                if (retiros >= MAXRETIROS) {
-                    System.out.println("Se alcanzo el maximo de retiros. ");
-                return false;
-                }
-                if (t.getMonto() > saldo) {
-                    throw new SaldoInsuficienteException();
-                }
-                saldo -= t.getMonto();
-                historial.add(t);
-                retiros++;
-                System.out.println("Retiro realizado con exito.");
-                    return true;
+            throw new Modelo.excepciones.MontoInvalidoException();
+        }
+        if (retiros >= MAXRETIROS) {
+            System.out.println("Se alcanzo el maximo de retiros permitidos. ");
+            return false;
+        }
+        if (t.getMonto() > saldo) {
+            throw new SaldoInsuficienteException();
+        }
+        saldo -= t.getMonto();
+        historial.add(t);
+        retiros++;
+        System.out.println("Retiro realizado con exito.");
+        return true;
+    
     }
     
     @Override

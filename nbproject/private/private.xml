@@ -7,9 +7,10 @@
             <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Vista/Menu.java</file>
             <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cuentas/CuentaCorriente.java</file>
             <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cuentas/Cuenta.java</file>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/excepciones/MontoInvalidoException.java</file>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cliente.java</file>
             <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cuentas/CuentaVista.java</file>
+            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cuentas/CuentaAhorro.java</file>
+            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Transaccion.java</file>
+            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/excepciones/SaldoInsuficienteException.java</file>
         </group>
     </open-files>
 </project-private>

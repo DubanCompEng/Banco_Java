@@ -107,14 +107,15 @@ public class Menu {
                     administrarCuentas(c);
                 }
                 case 2 ->{
+                    if (c.getCuentas().isEmpty()) {
+                        System.out.println("No tienes cuentas para transferir.");
+                        break;
+                    }                    
                     System.out.println("------------------------");
                     System.out.println("| Realizar transaccion |");
                     System.out.println("------------------------");
                     System.out.println("| Selec. cuenta origen |");
-                    if (c.getCuentas().isEmpty()) {
-                        System.out.println("No tienes cuentas para transferir.");
-                        break;
-                    }
+
                     Cuenta o = selecCuenta(c.getCuentas());
                     System.out.println("-------------------------");
                     System.out.println("| Selec. cuenta destino |");
@@ -127,13 +128,13 @@ public class Menu {
                     } else {
                         System.out.println("Tus conocidos:");
 
-                    for (String rutConocido : c.getConocidos()) {
-                        Cliente conocido = banco.buscarCliente(rutConocido);
+                        for (String rutConocido : c.getConocidos()) {
+                            Cliente conocido = banco.buscarCliente(rutConocido);
 
-                    if (conocido != null) {
-                        System.out.println("- " + conocido.getNombre()+ " | RUT: " + rutConocido);
+                            if (conocido != null) {
+                                System.out.println("- " + conocido.getNombre()+ " | RUT: " + rutConocido);
+                            }
                         }
-                    }
                     }
                     System.out.print("Ingrese el RUT del destinatario ");
                     String rut = sc.nextLine().trim();
@@ -152,9 +153,11 @@ public class Menu {
                     try{
                         double monto = ExceptionScannerDouble();
                         banco.realizarTransaccion(o, d, TipoTransaccion.TRANSFERENCIA, monto);
+                        c.agregarConocido(rut);
                     }catch(MontoInvalidoException e){
                         System.out.println("Error: " + e.getMessage() );
                     }
+                    
                 }
                 case 3 ->{
                     if (c.getCuentas().isEmpty()) {
