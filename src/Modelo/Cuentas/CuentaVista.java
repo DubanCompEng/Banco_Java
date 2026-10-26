@@ -11,7 +11,7 @@ import java.io.*;
 
 //--Constructor
 public class CuentaVista extends Cuenta implements Serializable{
-    private static double COMISION = 300;
+    private static final double COMISION = 300;
 
     public CuentaVista(String numeroCuenta, Double saldo, Cliente titular) {
         super(numeroCuenta, saldo, titular);

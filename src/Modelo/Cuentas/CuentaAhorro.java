@@ -10,8 +10,8 @@ import java.io.*;
 
 public class CuentaAhorro extends Cuenta implements Serializable{
     // implementar fechas y calcular(metodo) intereses con ella
-    private static double TASAINTERES = 0.1;
-    private static int MAXRETIROS= 3;
+    private static final double TASAINTERES = 0.1;
+    private static final int MAXRETIROS= 3;
     private int retiros;
 
     //---Constructor

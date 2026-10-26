@@ -1,10 +1,11 @@
 package Modelo;
 
 import Modelo.Cliente;
+import Modelo.interfaces.Listable;
+import java.io.Serializable;
 import java.util.HashMap;
 
-
-public class Sucursal {
+public class Sucursal implements Serializable, Listable{
     private String nombreSucursal;
     private String direccion;
     private HashMap< String, Cliente> clientes;
@@ -23,4 +24,9 @@ public class Sucursal {
 
     public HashMap<String, Cliente> getClientes() {return clientes;}
     public void setClientes(HashMap<String, Cliente> clientes) {this.clientes = clientes;}
+
+    @Override
+    public String mostrarInfo() {
+          return nombreSucursal + " | " + direccion + " | Clientes: " + clientes.size();
+    }
 }

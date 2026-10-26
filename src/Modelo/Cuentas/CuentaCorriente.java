@@ -1,4 +1,4 @@
-    package Modelo.Cuentas;// [REQUISITO: Herencia]
+package Modelo.Cuentas;// [REQUISITO: Herencia]
 
 import Modelo.Cliente;
 import Modelo.Transaccion;
@@ -7,14 +7,14 @@ import Modelo.excepciones.SaldoInsuficienteException;
 import java.io.*;
 
 public class CuentaCorriente extends Cuenta implements Serializable{
-    private static double COMISION = 1500;
-    private static double LINEA_CREDITO;
+    private final static double COMISION = 1500;
+    private final double LINEA_CREDITO;
     private EstadoCredito estado;
 
     //---Constructor
     public CuentaCorriente(String numeroCuenta, Double saldo, Cliente c, double credito) {
         super(numeroCuenta, saldo, c);
-        CuentaCorriente.LINEA_CREDITO = credito;
+        this.LINEA_CREDITO = credito;
         estado = EstadoCredito.SIN_USAR;
     }
 

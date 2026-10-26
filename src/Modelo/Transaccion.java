@@ -1,34 +1,39 @@
 package Modelo;
 
+import Modelo.enums.EstadoTransaccion;
 import Modelo.enums.TipoTransaccion;
-import Modelo.excepciones.MontoInvalidoException;
 import Modelo.interfaces.Listable;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Transaccion implements Serializable, Listable{
-    //implementar fecha y horario
+    private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    
     private final String numeroTransaccion;
     private final String cuentaOrigen;
     private final String cuentaDestino;
     private final TipoTransaccion tipo;
     private final double monto;
+    private final LocalDateTime fecha;
+    private EstadoTransaccion estado;
     public static int contadorTransaccion = 0;
 
     //--- Constructor
-    public Transaccion(String numeroTransaccion,String cuentaOrigen, String cuentaDestino, TipoTransaccion tipo, double monto) throws MontoInvalidoException {
-        if (monto <= 0) throw new MontoInvalidoException();
-        
+    public Transaccion(String numeroTransaccion, String cuentaOrigen, String cuentaDestino, TipoTransaccion tipo, double monto, EstadoTransaccion estado) {
         this.numeroTransaccion = numeroTransaccion;
+        this.fecha = LocalDateTime.now();
         this.cuentaOrigen = cuentaOrigen;
         this.cuentaDestino = cuentaDestino;
-        Transaccion.contadorTransaccion++;
         this.tipo = tipo;
         this.monto = monto;
+        this.estado = estado;
+        contadorTransaccion++;
     }
     
     @Override
-    public String mostrarInfo(){
-        return ""+ tipo + " |Origen: " + cuentaOrigen + "|Destino: " + cuentaDestino + "|Monto: " + monto;
+    public String mostrarInfo() {
+        return numeroTransaccion + " | " + fecha.format(FORMATO) + " | " + tipo + " | " + estado + " | Origen: " + cuentaOrigen + " | Destino: " + cuentaDestino + " | Monto: $" + monto;
     }
 
     //---Gets
@@ -38,4 +43,9 @@ public class Transaccion implements Serializable, Listable{
     public TipoTransaccion getTipo() {return tipo;}
     public double getMonto() {return monto;}
     public int getContadorTransaccion() {return contadorTransaccion;}
+    public static DateTimeFormatter getFORMATO() {return FORMATO;}
+    public LocalDateTime getFecha() {return fecha;}
+    public EstadoTransaccion getEstado() {return estado;}
+    public void setEstado(EstadoTransaccion estado) {this.estado = estado;}
+    
 }
