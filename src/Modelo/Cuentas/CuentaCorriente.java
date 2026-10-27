@@ -12,29 +12,28 @@ public class CuentaCorriente extends Cuenta implements Serializable{
     private EstadoCredito estado;
 
     //---Constructor
-    public CuentaCorriente(String numeroCuenta, Double saldo, Cliente c, double credito) {
-        super(numeroCuenta, saldo, c);
+    public CuentaCorriente(Double saldo, Cliente c, double credito) {
+        super(saldo, c);
         this.LINEA_CREDITO = credito;
         estado = EstadoCredito.SIN_USAR;
     }
 
     //---Metodos
     @Override
-    public boolean retirar(Transaccion t) {
-        if (t.getMonto() <= 0) {
-            throw new Modelo.excepciones.MontoInvalidoException();
-        }
-        double total = t.getMonto() + COMISION;
-        if (total > saldo + LINEA_CREDITO) {
-            throw new SaldoInsuficienteException();
-        }
-        
-        saldo -= total;
+    public boolean retirar(Transaccion t) {        
+        saldo -= t.getMonto()+COMISION;
         historial.add(t);
         setEstado();
         System.out.println("Retiro o transferencia realizado con exito.");
         return true;
-}
+    }
+    
+    @Override
+    public void validarRetiro(double monto){
+        if (monto + COMISION > saldo + LINEA_CREDITO) {
+            throw new SaldoInsuficienteException();
+        }
+    }
 
     
     @Override

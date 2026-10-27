@@ -13,22 +13,23 @@ import java.io.*;
 public class CuentaVista extends Cuenta implements Serializable{
     private static final double COMISION = 300;
 
-    public CuentaVista(String numeroCuenta, Double saldo, Cliente titular) {
-        super(numeroCuenta, saldo, titular);
+    public CuentaVista(Double saldo, Cliente titular) {
+        super(saldo, titular);
     }
 
     @Override
     public boolean retirar(Transaccion t) {
-        if (t.getMonto() <= 0) {
-            throw new Modelo.excepciones.MontoInvalidoException();
-        }
-        if (saldo < t.getMonto() + COMISION) {
-            throw new SaldoInsuficienteException();
-        }
     saldo -= t.getMonto() + COMISION;
     historial.add(t);
     System.out.println("Retiro realizada.");
     return true;
+    }
+    
+    @Override
+    public void validarRetiro(double monto){
+        if (saldo < monto + COMISION) {
+            throw new SaldoInsuficienteException();
+        }        
     }
     
     @Override

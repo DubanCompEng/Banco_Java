@@ -11,7 +11,9 @@ import Modelo.Sucursal;
 import Modelo.Cuentas.Cuenta;
 import Modelo.enums.TipoCuenta;
 import Modelo.enums.TipoTransaccion;
+import Modelo.excepciones.MaxRetirosException;
 import Modelo.excepciones.MontoInvalidoException;
+import Modelo.excepciones.SaldoInsuficienteException;
 import Modelo.interfaces.Listable;
 
 import java.util.Scanner;
@@ -38,7 +40,7 @@ public class Menu {
             System.out.println("|4. Cerrar");
             System.out.print("|Elegir opcion:");
             opcion = ExceptionScannerInt();
-            System.out.println("--------------------");
+            System.out.println("--------------------\n");
             
             switch(opcion){
                 case 1 -> {
@@ -51,18 +53,18 @@ public class Menu {
                 case 2 -> {
                     String[] info = new String[3];
                     System.out.println("-------------------");
-                    System.out.println("|  Ingrese su rut: ");
+                    System.out.print("|  Ingrese su rut: ");
                     info[0] = sc.nextLine();
-                    System.out.println("|  Ingrese su nombre: ");
+                    System.out.print("|  Ingrese su nombre: ");
                     info[1] = sc.nextLine();
-                    System.out.println("|  Cree clave de acceso: ");
+                    System.out.print("|  Cree clave de acceso: ");
                     info[2] = sc.nextLine();
-                    Sucursal sucursal = elegirSucursal();
+                    Sucursal sucursal = (Sucursal)selecObj(new ArrayList<>(banco.getSucursales()));
                     
                     Cliente c = banco.registrarCliente(info, sucursal);
                     if (c != null) {
-                        System.out.println("Cliente registrado correctamente.");
-                        System.out.println("Iniciando sesion.");
+                        System.out.println("\nCliente registrado correctamente.");
+                        System.out.println("Iniciando sesion...");
                         menuPaginaPrincipal(c);
                     } else {
                     System.out.println(
@@ -86,31 +88,31 @@ public class Menu {
         
         return info;
     }
-    
-    // crear metodo menuRegistro, hacer lo mismo que con menuInicioSesion
- 
+     
     public void menuPaginaPrincipal(Cliente c){
         int opcion;
         do{
-            System.out.println("----------------------");
+            System.out.println("\n----------------------");
             System.out.println("||  Menu Principal  ||");
             System.out.println("----------------------");
-            System.out.println("|1. Administrar cuentas");
-            System.out.println("|2. Realizar transaccion");
-            System.out.println("|3. Retirar");
-            System.out.println("|4. depositar");
-            System.out.println("|5. Historial");
-            System.out.println("|6. Cerrar sesion");
+            System.out.println("|1. Ver perfil");
+            System.out.println("|2. Administrar cuentas");
+            System.out.println("|3. Realizar transaccion");
+            System.out.println("|4. Retirar");
+            System.out.println("|5. depositar");
+            System.out.println("|6. Historial de transacciones completo");
+            System.out.println("|7. Cerrar sesion");
             System.out.println("|--------------------|");
             System.out.print("|Elegir opcion: ");
             opcion = ExceptionScannerInt();
-            System.out.println("----------------------");         
+            System.out.println("----------------------\n");         
         
             switch(opcion){
-                case 1 ->{
+                case 1 -> verPerfil(c);
+                case 2 ->{
                     administrarCuentas(c);
                 }
-                case 2 ->{
+                case 3 ->{
                     if (c.getCuentas().isEmpty()) {
                         System.out.println("No tienes cuentas para transferir.");
                         break;
@@ -120,16 +122,14 @@ public class Menu {
                     System.out.println("------------------------");
                     System.out.println("| Selec. cuenta origen |");
 
-                    Cuenta o = selecCuenta(c.getCuentas());
+                    Cuenta o = (Cuenta) selecObj(new ArrayList<>(c.getCuentas()));
                     System.out.println("-------------------------");
                     System.out.println("| Selec. cuenta destino |");
                     //seleccionar cliente y cuenta de destino
                     //un arraylist de string, de ruts de conocidos, for-each para imprimir
                     //escribir el rut a elegir, puede ser uno de esos o de un nuevo conocido(siempre que este en el hashmap de clientes)
                     //seleccionar cuenta del conocido, si no una predefinida, i = 0
-                    if (c.getConocidos().isEmpty()) {
-                        System.out.println("no tienes conocidos registrados.");
-                    } else {
+                    if (!c.getConocidos().isEmpty()) {
                         System.out.println("Tus conocidos:");
 
                         for (String rutConocido : c.getConocidos()) {
@@ -152,67 +152,71 @@ public class Menu {
                     
                     System.out.println("-------------------------");
                     System.out.println("| Seleccionar cuenta destino |");
-                    Cuenta d = selecCuenta(cd.getCuentas());
+                    Cuenta d = (Cuenta) selecObj(new ArrayList<>(c.getCuentas()));
                     if (d == o){
                         System.out.println("La cuenta de origen y destino no pueden ser la misma");
+                        
+                    } else {
+                        System.out.println("---------------------");
+                        System.out.println("| Ingresar monto: ");
+                        try{
+                            double monto = ExceptionScannerDouble();
+                            banco.realizarTransaccion(o, d, TipoTransaccion.TRANSFERENCIA, monto);
+                            c.agregarConocido(rut);
+                            System.out.println("");
+                        }catch(MontoInvalidoException | SaldoInsuficienteException | MaxRetirosException e){
+                            System.out.println("Error: " + e.getMessage());
+                        }                    
                     }
-                    
-                    System.out.println("---------------------");
-                    System.out.println("| Ingresar monto: ");
-                    try{
-                        double monto = ExceptionScannerDouble();
-                        banco.realizarTransaccion(o, d, TipoTransaccion.TRANSFERENCIA, monto);
-                        c.agregarConocido(rut);
-                    }catch(MontoInvalidoException e){
-                        System.out.println("Error: " + e.getMessage() );
-                    }
-                    
                 }
-                case 3 ->{
+                case 4 ->{
                     if (c.getCuentas().isEmpty()) {
                         System.out.println("No tienes cuentas para retirar.");
                         break;
                     }
                     System.out.println("| Selecciona la cuenta de origen |");
-                    Cuenta origen = selecCuenta(c.getCuentas());
+                    Cuenta origen = (Cuenta) selecObj(new ArrayList<>(c.getCuentas()));
                     System.out.print("Ingrese el monto a retirar: ");
                     try {
                         double monto = ExceptionScannerDouble();
                         banco.realizarTransaccion(origen, null, TipoTransaccion.RETIRO, monto);
-                    } catch (MontoInvalidoException e) {
+                    } catch (MontoInvalidoException | SaldoInsuficienteException | MaxRetirosException e) {
                         System.out.println("Error: " + e.getMessage());
                     }
-                    }
-                case 4 -> {
+                }
+                case 5 -> {
                     if (c.getCuentas().isEmpty()) {
                         System.out.println("No tienes cuentas para depositar.");
                         break;
                     }
                     System.out.println("| Selecciona la cuenta de destino |");
-                    Cuenta destino = selecCuenta(c.getCuentas());        
+                    Cuenta destino = (Cuenta) selecObj(new ArrayList<>(c.getCuentas()));        
                     System.out.print("Ingrese el monto a depositar: ");
 
                     try {
                         double monto = ExceptionScannerDouble();
-                        if (monto <= 0) {
-                            System.out.println("Monto invalido");
-                            break;
-                        }banco.realizarTransaccion(null,destino,TipoTransaccion.DEPOSITO,monto);
-                    }catch (MontoInvalidoException e) {
+                        banco.realizarTransaccion(null,destino,TipoTransaccion.DEPOSITO,monto);
+                    }catch (MontoInvalidoException | SaldoInsuficienteException | MaxRetirosException e) {
                         System.out.println("Error: " + e.getMessage());
                     }
                 }
-                case 5 -> verPerfil(c);
-                case 6 -> System.out.println("Cerrando sesion.");
+                case 6 -> {
+                    System.out.println("\n----------------------------");
+                    System.out.println("| Historial de operaciones:");
+                    for(int i = 0; i < c.getCuentas().size(); i++){
+                        listarInfo(new ArrayList<>(c.getCuentas().get(i).getHistorial()));
+                    }
                 }
-        } while(opcion != 6);
+                case 7 -> System.out.println("Cerrando sesion...");
+                }
+        } while(opcion != 7);
     }
     
     public void administrarCuentas(Cliente c){
         int opcion;
         
         do{
-            System.out.println("----------------------------");
+            System.out.println("\n----------------------------");
             System.out.println("| Administrador de cuentas |");
             System.out.println("|--------------------------|");
             System.out.println("|1. Ver una cuenta");
@@ -221,22 +225,22 @@ public class Menu {
             System.out.println("|4. Eliminar cuenta");
             System.out.println("|5. Cerrar");
             System.out.println("|--------------------------|");
-            System.out.println("|Seleccionar opcion: ");
+            System.out.print("|Seleccionar opcion: ");
             opcion = ExceptionScannerInt();
-            System.out.println("----------------------------");
+            System.out.println("----------------------------\n");
             
             switch(opcion){
                 case 1 ->{
                     if (!c.getCuentas().isEmpty()){
-                        Cuenta cu = selecCuenta(c.getCuentas());
+                        Cuenta cu = (Cuenta) selecObj(new ArrayList<>(c.getCuentas()));
                         menuCuenta(cu);                        
-                    } else System.out.println("");
+                    } else System.out.println("\nCliente no tiene ninguna cuenta bancaria\n");
                 }
                 case 2 -> {
                     if (!c.getCuentas().isEmpty()){
                         ArrayList<Listable> cuentas = new ArrayList<>(c.getCuentas());
                         listarInfo(cuentas);
-                    }
+                    } else System.out.println("\nCliente no tiene ninguna cuenta bancaria\n");
                 }
                 case 3 ->{
                     int selec;
@@ -253,20 +257,20 @@ public class Menu {
                         selec = ExceptionScannerInt();
                     }while(selec < 1 || selec > 4);
                     switch(selec){
-                        case 1 ->  {if (banco.crearCuenta(c, TipoCuenta.VISTA)) System.out.println("|Cuenta vista creada|");}
-                        case 2 -> {if (banco.crearCuenta(c, TipoCuenta.AHORRO))System.out.println("|Cuenta ahorro creada|");} 
+                        case 1 ->  {if (banco.crearCuenta(c, TipoCuenta.VISTA)) System.out.println("\n|Cuenta vista creada|");}
+                        case 2 -> {if (banco.crearCuenta(c, TipoCuenta.AHORRO))System.out.println("\n|Cuenta ahorro creada|");} 
                         case 3 -> {
-                            if (banco.crearCuenta(c, TipoCuenta.CORRIENTE))System.out.println("|Cuenta corriente aprobada|");
-                            else System.out.println("|Cuenta corriente rechazada|");
+                            if (banco.crearCuenta(c, TipoCuenta.CORRIENTE))System.out.println("\n|Cuenta corriente aprobada|");
+                            else System.out.println("\n|Cuenta corriente rechazada|");
                         } 
                     }
                 }
                 case 4 ->{
                     if (!c.getCuentas().isEmpty()){
-                        Cuenta cu = selecCuenta(c.getCuentas());
-                        if (banco.eliminarCuenta(c, cu))System.out.println("|Cuenta eliminada con exito|");
-                        else System.out.println("|Eliminacion de cuenta no aprobado, deuda activa|");                    
-                    }
+                        Cuenta cu = (Cuenta) selecObj(new ArrayList<>(c.getCuentas()));
+                        if (banco.eliminarCuenta(c, cu))System.out.println("\n|Cuenta eliminada con exito|");
+                        else System.out.println("\n|Eliminacion de cuenta no aprobado, deuda activa|");                    
+                    } else System.out.println("\nCliente no tiene ninguna cuenta bancaria\n");
                 }
             }
         }while(opcion != 5);
@@ -276,12 +280,12 @@ public class Menu {
         int opcion;
         do{
             System.out.println("--------------------");
-            System.out.println("| Cuenta n°"+ cu.getNumeroCuenta() +" |");
+            System.out.println("| Cuenta num "+ cu.getNumeroCuenta() +" |");
             System.out.println("--------------------");
             System.out.println("|Saldo: " + cu.getSaldo());
             System.out.println("|Titular: " + cu.getC().getNombre());
             System.out.println("|------------------");
-            System.out.println("|1. Ver historial");
+            System.out.println("|1. Ver historial de la cuenta");
             System.out.println("|2. Cerrar");
             System.out.println("|------------------");
             System.out.print("|Elegir opcion: ");
@@ -296,10 +300,10 @@ public class Menu {
         }while(opcion != 2);
     }
     
+    /*
     public Cuenta selecCuenta(ArrayList<Cuenta> cuentas){
         if (cuentas.isEmpty()) return null;
         int seleccion;
-        System.out.println("---------------------");
         ArrayList<Listable> lista = new ArrayList<>(cuentas);
         do{
             listarInfo(lista);
@@ -310,7 +314,24 @@ public class Menu {
         }while(seleccion < 1 || seleccion > lista.size());
         
         return (Cuenta)cuentas.get(seleccion-1);
+    }*/
+    
+    
+    public Listable selecObj(ArrayList<Listable> selec){
+        if (selec.isEmpty()) return null;
+        int seleccion;
+        ArrayList<Listable> lista = new ArrayList<>(selec);
+        do{
+            listarInfo( new ArrayList<>(lista));
+            System.out.println("---------------------");
+            System.out.print("|Seleccionar Cuenta: ");
+            seleccion = ExceptionScannerInt();
+            if (seleccion < 1 || seleccion > lista.size()) System.out.println(" Cuenta no encontrada");
+        }while(seleccion < 1 || seleccion > lista.size());
+        
+        return selec.get(seleccion-1);
     }
+    
     
     public int ExceptionScannerInt(){
         try{
@@ -332,7 +353,7 @@ public class Menu {
     
     public void listarInfo(ArrayList<Listable> l){
         if (l.isEmpty()){
-            System.out.println("|No hay nada que listar|");
+            System.out.println("|No hay nada que listar|\n");
             return;
         }
         
@@ -340,7 +361,7 @@ public class Menu {
         for (int i = 0; i < l.size(); i++){
             System.out.println("|" + (i+1) + ") " + l.get(i).mostrarInfo() + " |");
         }
-        System.out.println("--------------------");
+        System.out.println("");
     }
     
     public Sucursal elegirSucursal() {
@@ -358,14 +379,12 @@ public class Menu {
     }
     
     public void verPerfil(Cliente c) {
-        System.out.println("----------------------------");
+        System.out.println("\n----------------------------");
         System.out.println("| Perfil de " + c.getNombre());
         System.out.println("| RUT: " + c.getRut());
         System.out.println("| Cuentas: " + c.getCuentas().size());
         System.out.println("| Saldo total: $" + c.getValorRanking());
         System.out.println("----------------------------");
-        System.out.println("| Historial de operaciones:");
-        listarInfo(new ArrayList<>(banco.historialDeCliente(c)));
     }
     
     public void mostrarRanking() {
@@ -393,24 +412,19 @@ public class Menu {
             System.out.println("|1. Ranking de clientes");
             System.out.println("|2. Historial global de operaciones");
             System.out.println("|3. Clientes ordenados por nombre");
-            System.out.println("|4. Buscar cliente por nombre");
-            System.out.println("|5. Buscar cuenta por numero");
-            System.out.println("|6. Ver sucursales");
-            System.out.println("|7. Volver");
+            System.out.println("|4. Buscar cuenta por numero");
+            System.out.println("|5. Ver sucursales");
+            System.out.println("|6. Volver");
             System.out.print("|Elegir opcion: ");
             opcion = ExceptionScannerInt();
-            System.out.println("-------------------------------");
+            System.out.println("-------------------------------\n");
 
             switch (opcion) {
                 case 1 -> mostrarRanking();
                 case 2 -> listarInfo(new ArrayList<>(banco.getHistorial()));
                 case 3 -> listarInfo(new ArrayList<>(banco.clientesOrdenadosPorNombre()));
                 case 4 -> {
-                    System.out.print("|Nombre a buscar: ");
-                    String texto = sc.nextLine().trim();
-                    listarInfo(new ArrayList<>(banco.buscarClientesPorNombre(texto)));
-                }
-                case 5 -> {
+                    if(banco.getCuentas().isEmpty()) break;
                     System.out.print("|Numero de cuenta: ");
                     Cuenta cu = banco.buscarCuenta(sc.nextLine().trim());
                     if (cu == null) {
@@ -421,10 +435,10 @@ public class Menu {
                         listarInfo(uno);
                     }
                 }
-                case 6 -> listarInfo(new ArrayList<>(banco.getSucursales()));
-                case 7 -> System.out.println("Volviendo.");
+                case 5 -> listarInfo(new ArrayList<>(banco.getSucursales()));
+                case 6 -> System.out.println("Volviendo.");
                 default -> System.out.println("Opcion invalida.");
             }
-        } while (opcion != 7);
+        } while (opcion != 6);
         }
 }

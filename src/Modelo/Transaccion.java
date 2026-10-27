@@ -1,7 +1,7 @@
 package Modelo;
 
-import Modelo.enums.EstadoTransaccion;
 import Modelo.enums.TipoTransaccion;
+import Modelo.excepciones.MontoInvalidoException;
 import Modelo.interfaces.Listable;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,24 +16,26 @@ public class Transaccion implements Serializable, Listable{
     private final TipoTransaccion tipo;
     private final double monto;
     private final LocalDateTime fecha;
-    private EstadoTransaccion estado;
     public static int contadorTransaccion = 0;
 
     //--- Constructor
-    public Transaccion(String numeroTransaccion, String cuentaOrigen, String cuentaDestino, TipoTransaccion tipo, double monto, EstadoTransaccion estado) {
-        this.numeroTransaccion = numeroTransaccion;
+    public Transaccion(String cuentaOrigen, String cuentaDestino, TipoTransaccion tipo, double monto) throws MontoInvalidoException {
+        if (monto <= 0) {
+            throw new MontoInvalidoException();
+        }
+        
+        this.numeroTransaccion = "0"+contadorTransaccion;
         this.fecha = LocalDateTime.now();
         this.cuentaOrigen = cuentaOrigen;
         this.cuentaDestino = cuentaDestino;
         this.tipo = tipo;
         this.monto = monto;
-        this.estado = estado;
         contadorTransaccion++;
     }
     
     @Override
     public String mostrarInfo() {
-        return numeroTransaccion + " | " + fecha.format(FORMATO) + " | " + tipo + " | " + estado + " | Origen: " + cuentaOrigen + " | Destino: " + cuentaDestino + " | Monto: $" + monto;
+        return "numero de transaccion: " + numeroTransaccion + " | realizada el " + fecha.format(FORMATO) + " | " + tipo + " | Origen: " + cuentaOrigen + " | Destino: " + cuentaDestino + " | Monto: $" + monto;
     }
 
     //---Gets
@@ -43,9 +45,7 @@ public class Transaccion implements Serializable, Listable{
     public TipoTransaccion getTipo() {return tipo;}
     public double getMonto() {return monto;}
     public int getContadorTransaccion() {return contadorTransaccion;}
-    public static DateTimeFormatter getFORMATO() {return FORMATO;}
     public LocalDateTime getFecha() {return fecha;}
-    public EstadoTransaccion getEstado() {return estado;}
-    public void setEstado(EstadoTransaccion estado) {this.estado = estado;}
+
     
 }

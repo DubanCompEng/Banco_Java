@@ -14,10 +14,7 @@ import Modelo.Cuentas.CuentaAhorro;
 import Modelo.Cuentas.CuentaCorriente;
 import Modelo.Cuentas.CuentaVista;
 import Modelo.enums.TipoCuenta;
-import Modelo.enums.EstadoTransaccion;
 import Modelo.enums.TipoTransaccion;
-import Modelo.excepciones.MontoInvalidoException;
-import Modelo.excepciones.SaldoInsuficienteException;
 import java.io.*;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -92,9 +89,7 @@ public class Banco {
         
         Cliente cliente = new Cliente(rut, nombre, clave);
         clientes.put(rut, cliente);
-        
-        if (sucursal != null) sucursal.getClientes().put(rut,cliente);
-        
+                
         return cliente;
     }
     
@@ -103,12 +98,10 @@ public class Banco {
     public boolean crearCuenta(Cliente c, TipoCuenta tc){
         switch(tc){
             case TipoCuenta.VISTA -> {
-                String numCuenta = "00" + (Cuenta.contadorCuentas + 1000);
-                c.agregarCuenta(new CuentaVista(numCuenta, 0.0, c));
+                c.agregarCuenta(new CuentaVista(0.0, c));
             }
             case TipoCuenta.AHORRO ->{
-                String numCuenta = "00" + (Cuenta.contadorCuentas + 1000);
-                c.agregarCuenta(new CuentaAhorro(numCuenta, 0.0, c));
+                c.agregarCuenta(new CuentaAhorro(0.0, c));
             }
             case TipoCuenta.CORRIENTE ->{
                 double ranking = c.getValorRanking();
@@ -117,8 +110,7 @@ public class Banco {
                 else if (ranking < 1000000)credito = 500000;
                 else if (ranking < 10000000)credito = 5000000;
                 else credito = 20000000;
-                String numCuenta = "00" + (Cuenta.contadorCuentas + 1000);
-                c.agregarCuenta( new CuentaCorriente(numCuenta, 0.0, c, credito));
+                c.agregarCuenta( new CuentaCorriente(0.0, c, credito));
             }
         }
         return true;
@@ -146,56 +138,32 @@ public class Banco {
     public void realizarTransaccion(Cuenta o, Cuenta d, TipoTransaccion tt, double monto){
         if (o != null && d != null){
             // transaccion entre 2 cuentas
-            Transaccion t = new Transaccion(""+Transaccion.contadorTransaccion, o.getNumeroCuenta(), d.getNumeroCuenta(), tt, monto, EstadoTransaccion.RECHAZADA);
-            try{
-                if (o.retirar(t)) {
-                    d.depositar(t);
-                    t.setEstado(EstadoTransaccion.EXITOSA);
-                } else {
-                    System.out.println("No se pudo realizar el retiro.");
-                }
-            }catch(SaldoInsuficienteException e){
-                System.out.println("Error:" + e.getMessage());
-            }
+            
+            o.validarRetiro(monto); // valida que se pueda sacar ese monto de la cuenta
+            //al crear la transaccion solo si se valida el monto, se crea la transaccion
+            Transaccion t = new Transaccion( o.getNumeroCuenta(), d.getNumeroCuenta(), tt, monto);
+
+            o.retirar(t);
+            d.depositar(t);
         } else {
             if (o == null && d != null){ //deposito de dinero desde una caja hacia una cuenta de destino
-                Transaccion t = new Transaccion(""+Transaccion.contadorTransaccion, "Cajero", d.getNumeroCuenta(), tt, monto,EstadoTransaccion.RECHAZADA);
-                try{
-                    d.depositar(t);
-                    t.setEstado(EstadoTransaccion.EXITOSA);
-                    historial.add(t);
-                    
-                }catch(SaldoInsuficienteException e){
-                    System.out.println("Error:" + e.getMessage());
-                }
+                
+                //al crear la transaccion solo si se valida el monto, se crea la transaccion            
+                Transaccion t = new Transaccion("Cajero", d.getNumeroCuenta(), tt, monto);
+                
+                d.depositar(t);
+                historial.add(t);
                 
             }else if(o != null && d == null){ //retiro de dinero desde una cuenta, en un cajero
-                Transaccion t = new Transaccion(""+Transaccion.contadorTransaccion, o.getNumeroCuenta(), "Cajero", tt, monto, EstadoTransaccion.RECHAZADA);
-                try{
-                    o.retirar(t);
-                    t.setEstado(EstadoTransaccion.EXITOSA);
-                    historial.add(t);
-                    
-                }catch(SaldoInsuficienteException e){
-                    System.out.println("Error:" + e.getMessage());
-                }
+                
+                o.validarRetiro(monto);// valida que se pueda sacar ese monto de la cuenta
+                //al crear la transaccion solo si se valida el monto, se crea la transaccion
+                Transaccion t = new Transaccion(o.getNumeroCuenta(), "Cajero", tt, monto);
+                
+                o.retirar(t);
+                historial.add(t);
             }
         }
-    }
-    
-    public ArrayList<Transaccion> historialDeCliente(Cliente c) {
-        ArrayList<String> numeros = new ArrayList<>();
-        for (Cuenta cu : c.getCuentas()){ 
-            numeros.add(cu.getNumeroCuenta());
-        }
-        
-        ArrayList<Transaccion> resultado = new ArrayList<>();
-        for (Transaccion t : historial) {
-            if (numeros.contains(t.getCuentaOrigen()) || numeros.contains(t.getCuentaDestino())) {
-                resultado.add(t);
-            }
-        }
-        return resultado;
     }
     
     //-----REPORTES
@@ -209,14 +177,6 @@ public class Banco {
         ArrayList<Cliente> lista = new ArrayList<>(clientes.values());
         lista.sort((a, b) -> a.getNombre().compareToIgnoreCase(b.getNombre()));
         return lista;
-    }
-        
-    public ArrayList<Cliente> buscarClientesPorNombre(String texto) {
-        ArrayList<Cliente> resultado = new ArrayList<>();
-        for (Cliente c : clientes.values()) {
-            if (c.getNombre().toLowerCase().contains(texto.toLowerCase())) resultado.add(c);
-        }
-        return resultado;
     }
     
     //-----PERSISTENCIA
@@ -241,4 +201,5 @@ public class Banco {
 
     public ArrayList<Transaccion> getHistorial() { return historial; }
     public ArrayList<Sucursal> getSucursales() { return sucursales; }
+    public HashMap<String, Cuenta> getCuentas(){return cuentas;}
 }

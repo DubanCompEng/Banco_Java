@@ -4,7 +4,7 @@ package Modelo.Cuentas; // [REQUISITO: Package]
 
 import Modelo.Cliente;
 import Modelo.Transaccion;
-import Modelo.enums.TipoTransaccion;
+import Modelo.excepciones.MaxRetirosException;
 import Modelo.excepciones.SaldoInsuficienteException;
 import java.io.*;
 
@@ -15,23 +15,19 @@ public class CuentaAhorro extends Cuenta implements Serializable{
     private int retiros;
 
     //---Constructor
-    public CuentaAhorro(String numeroCuenta, Double saldo, Cliente titular) {
-        super(numeroCuenta, saldo, titular);
+    public CuentaAhorro(Double saldo, Cliente titular) {
+        super(saldo, titular);
         this.retiros = 0;
     }
 
     @Override
+    public void validarRetiro(double monto){
+        if (monto > saldo) throw new SaldoInsuficienteException();
+        if (retiros == MAXRETIROS) throw new MaxRetirosException();
+    }
+    
+    @Override
     public boolean retirar(Transaccion t){
-        if (t.getMonto() <= 0) {
-            throw new Modelo.excepciones.MontoInvalidoException();
-        }
-        if (retiros >= MAXRETIROS) {
-            System.out.println("Se alcanzo el maximo de retiros permitidos. ");
-            return false;
-        }
-        if (t.getMonto() > saldo) {
-            throw new SaldoInsuficienteException();
-        }
         saldo -= t.getMonto();
         historial.add(t);
         retiros++;
@@ -47,5 +43,4 @@ public class CuentaAhorro extends Cuenta implements Serializable{
     
     //--- Get y Set
     public int getRetiros() { return retiros;}
-    public void setRetiros() { this.retiros += 1;}
 }

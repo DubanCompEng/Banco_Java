@@ -67,10 +67,5 @@ public class Cliente implements Listable, Ranking, Serializable{
     public String mostrarInfo() {
         return nombre + "| " + rut + ".";
     }
-
-    
-    //---Gets y Sets
-    public static int getContador() {return contador;}
-    
     
 }
