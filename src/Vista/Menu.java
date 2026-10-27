@@ -152,7 +152,7 @@ public class Menu {
                     
                     System.out.println("-------------------------");
                     System.out.println("| Seleccionar cuenta destino |");
-                    Cuenta d = (Cuenta) selecObj(new ArrayList<>(c.getCuentas()));
+                    Cuenta d = (Cuenta) selecObj(new ArrayList<>(cd.getCuentas())); //solo se mostrban cuentas de origen no del destinatario
                     if (d == o){
                         System.out.println("La cuenta de origen y destino no pueden ser la misma");
                         

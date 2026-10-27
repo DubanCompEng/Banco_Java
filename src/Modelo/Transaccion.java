@@ -24,8 +24,8 @@ public class Transaccion implements Serializable, Listable{
             throw new MontoInvalidoException();
         }
         
-        this.numeroTransaccion = "0"+contadorTransaccion;
-        this.fecha = LocalDateTime.now();
+        this.numeroTransaccion = cuentaOrigen +"0"+contadorTransaccion; // cada transaccion de cuentas empezaba en 00 agregue 
+        this.fecha = LocalDateTime.now();                               // cuenta de origen para que no sean iguales.
         this.cuentaOrigen = cuentaOrigen;
         this.cuentaDestino = cuentaDestino;
         this.tipo = tipo;
