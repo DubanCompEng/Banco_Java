@@ -4,6 +4,7 @@ package Modelo.Cuentas; // [REQUISITO: Package]
 
 import Modelo.Cliente;
 import Modelo.Transaccion;
+import Modelo.enums.TipoTransaccion;
 import Modelo.excepciones.SaldoInsuficienteException;
 
 import java.io.*;
@@ -20,7 +21,9 @@ public class CuentaVista extends Cuenta implements Serializable{
     public boolean retirar(Transaccion t) {
         saldo -= t.getMonto() + COMISION;
         historial.add(t);
-        System.out.println("Retiro realizada.");
+        if(t.getTipo() == TipoTransaccion.RETIRO){
+            System.out.println("Retiro realizado");
+        }
         return true;
     }
     

@@ -3,6 +3,7 @@ package Modelo.Cuentas;// [REQUISITO: Herencia]
 import Modelo.Cliente;
 import Modelo.Transaccion;
 import Modelo.enums.EstadoCredito;
+import Modelo.enums.TipoTransaccion;
 import Modelo.excepciones.SaldoInsuficienteException;
 import java.io.*;
 
@@ -24,7 +25,9 @@ public class CuentaCorriente extends Cuenta implements Serializable{
         saldo -= t.getMonto()+COMISION;
         historial.add(t);
         setEstado();
-        System.out.println("Retiro o transferencia realizado con exito.");
+                if(t.getTipo() == TipoTransaccion.RETIRO){
+            System.out.println("Retiro realizado");
+        }
         return true;
     }
     

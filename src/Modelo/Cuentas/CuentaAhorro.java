@@ -4,6 +4,7 @@ package Modelo.Cuentas; // [REQUISITO: Package]
 
 import Modelo.Cliente;
 import Modelo.Transaccion;
+import Modelo.enums.TipoTransaccion;
 import Modelo.excepciones.MaxRetirosException;
 import Modelo.excepciones.SaldoInsuficienteException;
 import java.io.*;
@@ -30,8 +31,10 @@ public class CuentaAhorro extends Cuenta implements Serializable{
     public boolean retirar(Transaccion t){
         saldo -= t.getMonto();
         historial.add(t);
+                if(t.getTipo() == TipoTransaccion.RETIRO){
+            System.out.println("Retiro realizado");
+        }
         retiros++;
-        System.out.println("Retiro realizado con exito.");
         return true;
     
     }

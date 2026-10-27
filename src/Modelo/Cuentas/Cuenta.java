@@ -4,6 +4,7 @@ package Modelo.Cuentas; // [REQUISITO: Package]
 
 import Modelo.Cliente;
 import Modelo.Transaccion;
+import Modelo.enums.TipoTransaccion;
 import Modelo.interfaces.Listable;
 import Modelo.interfaces.Selecionable;
 import java.io.Serializable;
@@ -26,18 +27,18 @@ public abstract class Cuenta implements Serializable, Listable, Selecionable {
         contadorCuentas++;
     }
 
-    // hay que tratar a depositar como un deposito en la cuenta, desde donde sea
     public void depositar(Transaccion t){
         saldo+= t.getMonto();
         historial.add(t);
-        System.out.println("Deposito realizado");
+        switch (t.getTipo()) {
+            case TipoTransaccion.TRANSFERENCIA -> System.out.println("Transferencia realizada");
+                
+            case TipoTransaccion.DEPOSITO -> System.out.println("Deposito realizado");
+        }
     }
     
     
     //---Metodo Abstract
-    // hay que tratar a retirar como retirar dinero de la cuenta, desde done y hacia donde, depende de mas
-    //del contexto en el que se llame al metodo, ya sea para transferir o retirar en caja
-    //el metodo recibe una transaccion t ysi el monto es mayor a el saldo guardar t, no crear uno nuevo
     public abstract boolean retirar (Transaccion t);
     public abstract void validarRetiro(double monto);
 
