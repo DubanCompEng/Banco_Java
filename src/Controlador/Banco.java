@@ -19,27 +19,28 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-public class Banco {
+public class Banco implements Serializable{
     private HashMap<String, Cliente> clientes = new HashMap<>();
     private HashMap<String, Cuenta> cuentas = new HashMap<>();
-    private ArrayList<Transaccion> historial = new ArrayList<>();
+    private ArrayList<Transaccion> historial = new ArrayList<>();//
     private ArrayList<Sucursal> sucursales = new ArrayList<>();
-    private Menu menu;
+    private transient Menu menu;
     
     public static final String nombre = "Pepe bank";
     public static final String archivo = "datos";
     public static final String CLAVE_ADMIN = "admin123";
         
-    public static void main(String[] args) {
-        Banco banco = new Banco();
-        
-        banco.clientes = banco.cargarDatos();
+    public static void main(String[] args) {                
+        Banco banco = cargarDatos();
         
         banco.menu = new Menu(banco);
         banco.menu.menuInicio();
         
         banco.guardarDatos();
     }
+    
+    
+    
     
     //-----CLIENTES
     public Cliente buscarCliente(String rut){
@@ -98,10 +99,14 @@ public class Banco {
     public boolean crearCuenta(Cliente c, TipoCuenta tc){
         switch(tc){
             case TipoCuenta.VISTA -> {
-                c.agregarCuenta(new CuentaVista(0.0, c));
+                Cuenta cu = new CuentaVista(0.0, c);
+                c.agregarCuenta(cu);
+                cuentas.put(cu.getNumeroCuenta(), cu);
             }
             case TipoCuenta.AHORRO ->{
-                c.agregarCuenta(new CuentaAhorro(0.0, c));
+                Cuenta cu = new CuentaAhorro(0.0, c);
+                c.agregarCuenta(cu);
+                cuentas.put(cu.getNumeroCuenta(), cu);
             }
             case TipoCuenta.CORRIENTE ->{
                 double ranking = c.getValorRanking();
@@ -110,7 +115,9 @@ public class Banco {
                 else if (ranking < 1000000)credito = 500000;
                 else if (ranking < 10000000)credito = 5000000;
                 else credito = 20000000;
-                c.agregarCuenta( new CuentaCorriente(0.0, c, credito));
+                Cuenta cu = new CuentaCorriente(0.0, c, credito);
+                c.agregarCuenta(cu);
+                cuentas.put(cu.getNumeroCuenta(), cu);
             }
         }
         return true;
@@ -180,19 +187,19 @@ public class Banco {
     }
     
     //-----PERSISTENCIA
-    public HashMap<String, Cliente> cargarDatos() {
-        if (!new File(archivo).exists()) return new HashMap<>();
+    public static Banco cargarDatos() {
+        if (!new File(archivo).exists()) return new Banco();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
-            return (HashMap<String, Cliente>) ois.readObject();
+            return (Banco)ois.readObject();
         } catch (Exception e) {
             System.out.println("Error al cargar: " + e.getMessage());
-            return new HashMap<>();
+            return new Banco();
         }
     }
     
     public void guardarDatos(){
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
-            oos.writeObject(clientes);
+            oos.writeObject(this);
         } catch (IOException e) {
             System.out.println("Error al guardar: " + e.getMessage());
         }
