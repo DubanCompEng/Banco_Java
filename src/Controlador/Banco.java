@@ -150,6 +150,7 @@ public class Banco implements Serializable{
 
             o.retirar(t);
             d.depositar(t);
+            historial.add(t);
         } else {
             if (o == null && d != null){ //deposito de dinero desde una caja hacia una cuenta de destino
                 
@@ -188,7 +189,10 @@ public class Banco implements Serializable{
     public static Banco cargarDatos() {
         if (!new File(archivo).exists()) return new Banco();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
-            return (Banco)ois.readObject();
+            Banco banco = (Banco)ois.readObject();
+            Cuenta.setContadorCuentas(banco.cuentas.size());
+            Transaccion.setContadorTransaccion(banco.historial.size());
+            return banco;
         } catch (Exception e) {
             System.out.println("Error al cargar: " + e.getMessage());
             return new Banco();

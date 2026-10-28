@@ -2,6 +2,43 @@
     [REQUISITO: Package],  [REQUISITO: Menu-Scanner]
 */
 
+/*
+Datos de precargados
+Clientes: 
+    Nombre: pepe, Rut: 123, Clave: 123
+    Nombre: pepa, Rut: 456, Clave: 456
+    Nombre: Luis, Rut: 12345678-9, Clave: 4321
+    Nombre: Carlos, Rut: 98765432-1, CLave: 6789
+    Nombre: Maria, Rut: 10202303-4, Clave: 123
+
+Cuentas:
+    Titular: pepe, Tipo: Vista, num: 0123000
+    Titular: pepa, Tipo: Vista, num: 0123003
+    Titular: Luis, Tipo: Vista, num: 0123005
+    Titular: Carlos, Tipo: Vista, num: 0123006
+    Titular: Maria, Tipo: Vista, num: 0123008
+
+    Titular: pepe, Tipo: Ahorro, num: 0123001
+    Titular: Maria, Tipo: Ahorro, num: 0123009
+    Titular: pepa, Tipo: Ahorro, num: 0123004
+
+    Titular: Pepe, Tipo: Corriente, num: 0123002
+    Titular: Carlos, Tipo: Corriente, num: 0123007
+    Titular: Maria, Tipo: Corriente, num: 01230010
+
+Transacciones:
+    Origen: pepe-Caja, Destino: pepe-Vista, Monto: 120000
+    Origen: Luis-Caja, Destino: Luis-Vista, Monto: 50000
+    Origen: Luis-vista, Destino: Carlos-Vista, Monto: 30000
+    Origen: Carlos-Cajero, Destino: Carlos-Vista, Monto: 100000
+    Origen: Carlos-Vista, Destino: Carlos-Corriente, Monto: 50000
+    Origen: Carlos-Corriente, Destino: pepe-Ahorro, Monto: 20000
+    Origen: pepe-Vista, Destino: Maria-Vista, Monto: 100000
+    Origen: Maria-Vista, Destino: Maria-Ahorro, Monto: 50000
+    Origen: Maria-Vista, Destino: Maria-Cajero, Monto: 30000
+   
+*/
+
 
 package Vista;
 
@@ -156,11 +193,10 @@ public class Menu {
                         try{
                             double monto = ExceptionScannerDouble();
                             banco.realizarTransaccion(o, d, TipoTransaccion.TRANSFERENCIA, monto);
-                            c.agregarConocido(rut);
-                            System.out.println("Transferencia exitosa");
+                            if(!c.getRut().equals(rut)) c.agregarConocido(rut);
                         }catch(MontoInvalidoException | SaldoInsuficienteException | MaxRetirosException e){
                             System.out.println("Error: " + e.getMessage());
-                        }                    
+                        }
                     }
                 }
                 case 4 ->{
@@ -394,6 +430,6 @@ public class Menu {
                 case 5 -> System.out.println("Volviendo.");
                 default -> System.out.println("Opcion invalida.");
             }
-        } while (opcion != 6);
+        } while (opcion != 5);
         }
 }

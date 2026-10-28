@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public abstract class Cuenta implements Serializable, Listable, Selecionable {
-    public static int contadorCuentas = 0;
+    private static int contadorCuentas = 0;
     
     protected final String numeroCuenta;
     protected final Cliente cliente;
@@ -55,5 +55,5 @@ public abstract class Cuenta implements Serializable, Listable, Selecionable {
     public ArrayList<Transaccion> getHistorial() {return historial;}
     
     public static int getContadorCuentas() { return contadorCuentas; }
-    public static void setContadorCuentas(int valor) { contadorCuentas = valor; }
+    public static void setContadorCuentas(int valor) { Cuenta.contadorCuentas = valor; }
 }

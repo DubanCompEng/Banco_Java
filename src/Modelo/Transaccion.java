@@ -16,7 +16,7 @@ public class Transaccion implements Serializable, Listable{
     private final TipoTransaccion tipo;
     private final double monto;
     private final LocalDateTime fecha;
-    public static int contadorTransaccion = 0;
+    private static int contadorTransaccion = 0;
 
     //--- Constructor
     public Transaccion(String cuentaOrigen, String cuentaDestino, TipoTransaccion tipo, double monto) throws MontoInvalidoException {
@@ -45,6 +45,7 @@ public class Transaccion implements Serializable, Listable{
     public TipoTransaccion getTipo() {return tipo;}
     public double getMonto() {return monto;}
     public int getContadorTransaccion() {return contadorTransaccion;}
+    public static void setContadorTransaccion(int valor){ Transaccion.contadorTransaccion = valor; }
     public LocalDateTime getFecha() {return fecha;}
 
     
