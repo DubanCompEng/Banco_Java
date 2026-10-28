@@ -7,7 +7,6 @@ package Controlador;
 
 import Vista.Menu;
 import Modelo.Cliente;
-import Modelo.Sucursal;
 import Modelo.Transaccion;
 import Modelo.Cuentas.Cuenta;
 import Modelo.Cuentas.CuentaAhorro;
@@ -23,7 +22,6 @@ public class Banco implements Serializable{
     private HashMap<String, Cliente> clientes = new HashMap<>();
     private HashMap<String, Cuenta> cuentas = new HashMap<>();
     private ArrayList<Transaccion> historial = new ArrayList<>();//
-    private ArrayList<Sucursal> sucursales = new ArrayList<>();
     private transient Menu menu;
     
     public static final String nombre = "Pepe bank";
@@ -78,7 +76,7 @@ public class Banco implements Serializable{
         return null;
     }
     
-    public Cliente registrarCliente(String[] info, Sucursal sucursal){
+    public Cliente registrarCliente(String[] info){
         
         String rut = info[0].trim();
         String nombre = info[1].trim();
@@ -207,6 +205,5 @@ public class Banco implements Serializable{
     }
 
     public ArrayList<Transaccion> getHistorial() { return historial; }
-    public ArrayList<Sucursal> getSucursales() { return sucursales; }
     public HashMap<String, Cuenta> getCuentas(){return cuentas;}
 }

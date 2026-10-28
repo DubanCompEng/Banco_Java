@@ -20,7 +20,7 @@ public abstract class Cuenta implements Serializable, Listable, Selecionable {
    
     // Constructor
     public Cuenta(Double saldo, Cliente titular) {
-        this.numeroCuenta = "0012300"+contadorCuentas;
+        this.numeroCuenta = "012300"+contadorCuentas;
         this.saldo = saldo;
         this.cliente = titular;
         this.historial = new ArrayList<>();
@@ -45,7 +45,7 @@ public abstract class Cuenta implements Serializable, Listable, Selecionable {
     
     @Override
     public String mostrarInfo(){
-        return "" + cliente.getNombre() + "|Numero de cuenta: " + numeroCuenta;
+        return "" + cliente.getNombre() + " |Numero de cuenta: " + numeroCuenta;
     }
     
     //---Gets y Sets
