@@ -6,11 +6,11 @@ import Modelo.Cliente;
 import Modelo.Transaccion;
 import Modelo.enums.TipoTransaccion;
 import Modelo.interfaces.Listable;
-import Modelo.interfaces.Selecionable;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Cuenta implements Serializable, Listable, Selecionable {
+public abstract class Cuenta implements Serializable, Listable {
+    private static final long serialVersionUID = 1L;
     private static int contadorCuentas = 0;
     
     protected final String numeroCuenta;

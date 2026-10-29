@@ -8,6 +8,8 @@ import Modelo.excepciones.SaldoInsuficienteException;
 import java.io.*;
 
 public class CuentaCorriente extends Cuenta implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     private final static double COMISION = 1500;
     private final double LINEA_CREDITO;
     private EstadoCredito estado;

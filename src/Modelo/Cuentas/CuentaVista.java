@@ -11,6 +11,8 @@ import java.io.*;
 
 //--Constructor
 public class CuentaVista extends Cuenta implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     private static final double COMISION = 300;
 
     public CuentaVista(Double saldo, Cliente titular) {

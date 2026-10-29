@@ -8,6 +8,8 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Cliente implements Listable, Ranking, Serializable{
+    private static final long serialVersionUID = 1L;
+
     public static int contador = 0;
 
     private final String rut;

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Transaccion implements Serializable, Listable{
+    private static final long serialVersionUID = 1L;
     private static final DateTimeFormatter FORMATO = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     
     private final String numeroTransaccion;

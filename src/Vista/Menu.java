@@ -56,6 +56,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Menu {
+
     private final Scanner sc;
     private final Banco banco;
     

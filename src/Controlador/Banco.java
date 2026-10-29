@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 public class Banco implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     private HashMap<String, Cliente> clientes = new HashMap<>();
     private HashMap<String, Cuenta> cuentas = new HashMap<>();
     private ArrayList<Transaccion> historial = new ArrayList<>();//

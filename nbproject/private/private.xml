@@ -3,17 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Vista/Menu.java</file>
             <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Controlador/Banco.java</file>
+            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Vista/Menu.java</file>
             <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cuentas/Cuenta.java</file>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cliente.java</file>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cuentas/CuentaCorriente.java</file>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cuentas/CuentaAhorro.java</file>
             <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Transaccion.java</file>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cuentas/CuentaVista.java</file>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/enums/TipoTransaccion.java</file>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/enums/TipoCuenta.java</file>
-            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/enums/EstadoCredito.java</file>
+            <file>file:/C:/Users/crist/Documents/NetBeansProjects/Banco_Java/src/Modelo/Cliente.java</file>
         </group>
     </open-files>
 </project-private>
