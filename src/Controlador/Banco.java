@@ -17,6 +17,7 @@ import Modelo.enums.TipoTransaccion;
 import java.io.*;
 import java.util.HashMap;
 import java.util.ArrayList;
+import javax.swing.SwingUtilities;
 
 public class Banco implements Serializable{
     private static final long serialVersionUID = 1L;
@@ -30,10 +31,15 @@ public class Banco implements Serializable{
     public static final String archivo = "datos";
     public static final String CLAVE_ADMIN = "admin123";
         
-    public static void main(String[] args) {                
+    public static void main(String[] args) {  
+        
         Banco banco = cargarDatos();
         
         banco.menu = new Menu(banco);
+            
+        SwingUtilities.invokeLater(() -> {
+            new MenuPrincipal(banco).mostrar();
+        });
         banco.menu.menuInicio();
         
         banco.guardarDatos();

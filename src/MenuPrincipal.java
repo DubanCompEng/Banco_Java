@@ -11,25 +11,25 @@ public class MenuPrincipal extends BaseFrame {
     @Override
     public void mostrar() {
         JTextField titulo = new JTextField("Menu Principal");
-        JButton btn1 = new JButton("Iniciar sesion");
-        JButton btn2 = new JButton("Registrar cliente");
-        JButton btn3 = new JButton("Iniciar administrador");
         
+        JButton btn1 = new JButton("Iniciar sesion");
         btn1.addActionListener(e -> {
-        dispose();
+            dispose();
             new LoginVista(banco).mostrar();
         });
-        
+
+        JButton btn2 = new JButton("Registrar cliente");
         btn2.addActionListener(e -> {
             dispose();
-            new RegistrarVista(banco).mostrar();});
+            new RegistrarVista(banco).mostrar();
+        });
         
+        JButton btn3 = new JButton("Iniciar administrador");
         btn3.addActionListener(e -> {
-        dispose();
+            dispose();
             new MenuAdmin(banco).mostrar();
         });
         
-       
         super.add(titulo);
         super.add(btn1);
         super.add(btn2);

@@ -6,7 +6,7 @@ import javax.swing.*;
 public class LoginVista extends BaseFrame {
     
     public LoginVista(Banco banco) {
-        super("Sistema — Login", banco);
+        super("Banco — Login", banco);
         setSize(400, 300);
         setResizable(false);
     }
@@ -16,10 +16,13 @@ public class LoginVista extends BaseFrame {
         JButton btnLogin = new JButton("Iniciar Sesion");
         
         btnLogin.addActionListener(e -> {
-            
+            //Autenticar
             dispose();
-            new MenuPrincipal(banco).mostrar();
+            new MenuCliente(banco).mostrar();
         });
+        
+        super.add(btnLogin);
+        
         setLocationRelativeTo(null);
         setVisible(true);
     }
