@@ -5,6 +5,7 @@
 
 package Controlador;
 
+import Vista.MenuPrincipal;
 import Vista.Menu;
 import Modelo.Cliente;
 import Modelo.Transaccion;
@@ -34,19 +35,22 @@ public class Banco implements Serializable{
     public static void main(String[] args) {  
         
         Banco banco = cargarDatos();
-        
-        banco.menu = new Menu(banco);
-            
+                    
         SwingUtilities.invokeLater(() -> {
             new MenuPrincipal(banco).mostrar();
         });
-        banco.menu.menuInicio();
-        
+                
         banco.guardarDatos();
     }
     
     
-    
+    //---- JavaSwing
+    public Cliente autenticar(String rut, String clave) {
+        Cliente c = clientes.get(rut.trim());
+        if (c != null && c.getClave().equals(clave)){
+            return c;
+        }return null;
+    }
     
     //-----CLIENTES
     public Cliente buscarCliente(String rut){

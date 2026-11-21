@@ -1,3 +1,5 @@
+package Vista;
+
 
 import Controlador.Banco;
 import java.awt.FlowLayout;
