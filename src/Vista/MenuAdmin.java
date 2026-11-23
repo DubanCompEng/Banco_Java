@@ -11,7 +11,14 @@ public class MenuAdmin extends BaseFrame{
 
     @Override
     public void mostrar() {
-    
+        
+        
+        
+        
+        
+        
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 }
     

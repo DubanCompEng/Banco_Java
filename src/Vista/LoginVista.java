@@ -1,10 +1,9 @@
-package Vista;
+package Vista; //Listo
 
 
 import Controlador.Banco;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import javax.swing.*;
 
 public class LoginVista extends BaseFrame {
