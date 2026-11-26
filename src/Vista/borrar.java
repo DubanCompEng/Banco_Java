@@ -54,7 +54,7 @@ public class borrar {
             
         } catch(Exception e){
             e.printStackTrace();
-        }
+        }    //bj
        
         
     }
