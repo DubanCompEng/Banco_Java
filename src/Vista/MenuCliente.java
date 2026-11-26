@@ -9,7 +9,7 @@ import javax.swing.*;
 public class MenuCliente extends BaseFrame {
 
     public MenuCliente(Banco banco, Cliente cliente) {
-        super("Banco — Login", banco);
+        super("Banco — Cliente", banco);
         setSize(400, 300);
         setResizable(false);
     }

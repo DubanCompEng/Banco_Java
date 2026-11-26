@@ -38,6 +38,7 @@ public class MenuPrincipal extends BaseFrame {
         
         JButton btn3 = new JButton("Iniciar administrador");
         btn3.addActionListener(new ActionListener() {
+            
             @Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane frame = new JOptionPane();

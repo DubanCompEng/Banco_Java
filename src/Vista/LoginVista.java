@@ -34,7 +34,7 @@ public class LoginVista extends BaseFrame {
         formulario.add(lblClave);
         formulario.add(txtClave);
         
-        JPanel botones = new JPanel(new BorderLayout(2, 1));
+        JPanel botones = new JPanel(new GridLayout(3, 1));
         botones.setBorder(BorderFactory.createEmptyBorder(12,12,12,12));
         
         JLabel lblText = new JLabel(" ");
@@ -51,9 +51,15 @@ public class LoginVista extends BaseFrame {
             }
         });
         
-        botones.add(lblText, BorderLayout.NORTH);
-        botones.add(btn1, BorderLayout.SOUTH);
+        JButton btn5 = new JButton("Volver");
+        btn5.addActionListener(e->{
+            dispose();
+            new MenuPrincipal(banco).mostrar();
+        });
         
+        botones.add(lblText);
+        botones.add(btn1);
+        botones.add(btn5);
         super.add(formulario, BorderLayout.CENTER);
         super.add(botones, BorderLayout.SOUTH);
         
