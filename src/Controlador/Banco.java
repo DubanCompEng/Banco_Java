@@ -196,7 +196,18 @@ public class Banco implements Serializable{
         lista.sort((a, b) -> a.getNombre().compareToIgnoreCase(b.getNombre()));
         return lista;
     }
-    
+
+    // Elimina un cliente 
+    public boolean eliminarCliente(Cliente c) {
+        if (c == null) return false;
+        return clientes.remove(c.getRut()) != null;
+    }
+
+    // Elimina una transacción historial
+    public boolean eliminarTransaccion(Transaccion t) {
+        if (t == null) return false;
+        return historial.remove(t);
+    }
     //-----PERSISTENCIA
     public static Banco cargarDatos() {
         if (!new File(archivo).exists()) return new Banco();

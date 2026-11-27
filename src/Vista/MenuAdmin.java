@@ -120,30 +120,48 @@ public class MenuAdmin extends BaseFrame{
             dialogTabla.add(scrollPane, BorderLayout.CENTER);
             
             JPanel botones = new JPanel(new GridLayout(3,0));
-            JButton btnCerrar = new JButton("Cerrar");
-            btnCerrar.addActionListener(ev -> dialogTabla.dispose());
-            botones.add(btnCerrar);
             
             JButton btnEliminar = new JButton("Eliminar");
             btnEliminar.addActionListener(e -> {
                 int fila = tabla.getSelectedRow();
-                String nombre = (String) modelo.getValueAt(fila, 0);
                 
                 if (fila == -1) {
                     JOptionPane.showMessageDialog(this,"Seleccione para eliminar");
                     return;
                 }
                 // Confirmar antes de eliminar
-                int resp = JOptionPane.showConfirmDialog(this,"¿Confirmar eliminacion "+ JOptionPane.YES_NO_OPTION);
+                int resp = JOptionPane.showConfirmDialog(this,"¿Confirmar eliminacion? "+ JOptionPane.YES_NO_OPTION);
                 if (resp == JOptionPane.YES_OPTION) {
-                    modelo.removeRow(fila); // modelo de tabla
-                    lista.remove(1);
+                    Object item = lista.get(fila);
+                    boolean eliminadoBackend = false;
+                    
                      //Falta eliminar el dato del backend
+                    if (item instanceof Cliente) {
+                        eliminadoBackend = banco.eliminarCliente((Cliente) item);
+                    } else if (item instanceof Transaccion) {
+                        eliminadoBackend = banco.eliminarTransaccion((Transaccion) item);
+                    }
+                    if (eliminadoBackend) {
+                        lista.remove(fila);
+                        modelo.removeRow(fila);
+                    } else {
+                        JOptionPane.showMessageDialog(dialogTabla, "No se pudo eliminar del sistema.");
+                    }
                 }
-            
             dialogTabla.setVisible(true);
             });
             botones.add(btnEliminar);
+            
+            JButton btnInforme = new JButton("Generar informe");
+            btnInforme.addActionListener(l ->{
+                
+                }
+            );
+            botones.add(btnInforme);
+            
+            JButton btnCerrar = new JButton("Cerrar");
+            btnCerrar.addActionListener(ev -> dialogTabla.dispose());
+            botones.add(btnCerrar);
             
             dialogTabla.add(botones, BorderLayout.SOUTH);
             
