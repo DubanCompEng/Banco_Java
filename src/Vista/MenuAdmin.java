@@ -10,11 +10,13 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import java.io.FileNotFoundException;
+import com.lowagie.text.DocumentException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
+import java.io.File;
 import javax.swing.table.TableModel;
 
 public class MenuAdmin extends BaseFrame{
@@ -156,42 +158,47 @@ public class MenuAdmin extends BaseFrame{
 
         JButton btnCrearPdf = new JButton("descargarPDf");
         
+        botones.add(btnCrearPdf);
+        
         btnCrearPdf.addActionListener(e -> {
 
             Document doc = new Document();
             try {
-                PdfWriter.getInstance(doc, new FileOutputStream("Cartola"));
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(MenuAdmin.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                String ruta = System.getProperty("user.dir") + File.separator + "Cartola.pdf";
+                PdfWriter.getInstance(doc, new FileOutputStream(ruta));
+                
+                doc.open();
 
-            doc.open();
+                doc.add(new Paragraph("Transacciones:"));
 
-            doc.add(new Paragraph("Transacciones:"));
+                PdfPTable pdfTable = new PdfPTable(modelo.getColumnCount());
 
-            PdfPTable pdfTable = new PdfPTable(modelo.getColumnCount());
-
-            for (int i = 0; i < modelo.getColumnCount(); i++){
-                pdfTable.addCell(modelo.getColumnName(i));
-            }
-            for (int i = 0; i < modelo.getRowCount(); i++){
-                for (int j = 0; j < modelo.getColumnCount(); j++){
-                    Object valor = modelo.getValueAt(i, j);
-
-                    if (valor != null) pdfTable.addCell(valor.toString());
-                    else pdfTable.addCell("");
+                for (int i = 0; i < modelo.getColumnCount(); i++){
+                    pdfTable.addCell(modelo.getColumnName(i));
                 }
-            }
+                for (int i = 0; i < modelo.getRowCount(); i++){
+                    for (int j = 0; j < modelo.getColumnCount(); j++){
+                        Object valor = modelo.getValueAt(i, j);
 
-            doc.add(pdfTable);
-            doc.close();
+                        if (valor != null) pdfTable.addCell(valor.toString());
+                        else pdfTable.addCell("");
+                    }
+                }
 
+                doc.add(pdfTable);
+                doc.close();
+            } catch (FileNotFoundException | DocumentException ex) {
+                Logger.getLogger(MenuAdmin.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error al crear el PDF: " + ex.getMessage());
+
+            }    
         });
             
+        
             
-            dialogTabla.add(botones, BorderLayout.SOUTH);
+        dialogTabla.add(botones, BorderLayout.SOUTH);
             
-            dialogTabla.setVisible(true);
+        dialogTabla.setVisible(true);
     }
 }
     
